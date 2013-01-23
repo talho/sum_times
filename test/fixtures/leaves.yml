@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  user_id: 1
+  hours: 1
+  start_date: 2013-01-23
+  end_date: 2013-01-23
+  approved: false
+
+two:
+  user_id: 1
+  hours: 1
+  start_date: 2013-01-23
+  end_date: 2013-01-23
+  approved: false

@@ -1,0 +1,21 @@
+<h1>Listing leaves</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @leaves.each do |leafe| %>
+  <tr>
+    <td><%= link_to 'Show', leafe %></td>
+    <td><%= link_to 'Edit', edit_leafe_path(leafe) %></td>
+    <td><%= link_to 'Destroy', leafe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Leave', new_leafe_path %>

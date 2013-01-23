@@ -1,0 +1,17 @@
+<%= form_for(@late) do |f| %>
+  <% if @late.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@late.errors.count, "error") %> prohibited this late from being saved:</h2>
+
+      <ul>
+      <% @late.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
