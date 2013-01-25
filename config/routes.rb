@@ -3,9 +3,26 @@ SumTimes::Application.routes.draw do
   get "holidays/index"
 
   resources :schedules, :except => [:update, :edit, :delete]
+  resources :lates
+  resources :leaves
+  resources :profiles, :except => [:edit, :update] do
+    collection do
+      get 'edit'
+      put '' => 'profiles#update'
+    end
+  end
+  resources :timesheets
+
+  namespace :admin do
+    resources :holidays
+    resources :profiles
+    resources :supervisors
+  end
 
   devise_for :admins
   devise_for :users
+
+  root :to => "schedules#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

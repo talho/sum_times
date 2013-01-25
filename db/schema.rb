@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20130123212113) do
     t.integer  "user_id"
     t.text     "reason"
     t.integer  "hours"
+    t.string   "type"
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "approved"
@@ -94,7 +95,9 @@ ActiveRecord::Schema.define(:version => 20130123212113) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
-    t.string   "name"
+    t.string   "name",                   :default => ""
+    t.float    "leave_time"
+    t.float    "sick_time"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

@@ -11,4 +11,6 @@ class User < ActiveRecord::Base
 
   has_and_belongs_to_many :supervisors, :association_foreign_key => :supervisor_id, :class_name => "User", :join_table => 'supervisor_users'
   has_and_belongs_to_many :supervises, :foreign_key => :supervisor_id, :class_name => "User", :join_table => 'supervisor_users'
+
+  has_many :schedules
 end

@@ -1,0 +1,13 @@
+<div>
+  Start Date: <%= l schedule.start_date, format: :short %><br/>
+  <% unless schedule.end_date.nil? %>
+  End Date: <%= l schedule.end_date, format: :short %><br/>
+  <% end %>
+  <ul class="unstyled">
+  <% schedule.days.each do |key, val| %>
+    <% if val["hours"] > 0 %>
+      <li><%= Date::DAYNAMES[key.to_i] %>: <%= val["hours"] %> hours, <%= val["start"] %> - <%= val["end"] %>, <%= val["lunch"] %> hour lunch</li>
+    <% end %>
+  <% end %>
+  </ul>
+</div>

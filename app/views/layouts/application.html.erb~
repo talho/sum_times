@@ -10,24 +10,25 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <div class="span2">
-       <%# Render a menu of all of the neat stuff you can do with this app %>
-       <ul class="nav nav-list">
-        <li class="nav-header">
-          <%= link_to raw('<i class="icon-cog"></i>'), '#', class: 'pull-right' %>
-          User Name
-        </li>
-        <li class="active">My Schedule</li>
-        <li>Leave Request</li>
-        <li>I'm going to be late!</li>
-        <li class="nav-header">Coworkers</li>
-        <li>Office Schedule</li>
-        <li>Holidays</li>
-        <li class="nav-header">Approvals</li>
-        <li>Leave Requests</li>
-        <li>Timesheets</li>
-       </ul>
+        <%# Render a menu of all of the neat stuff you can do with this app %>
+        <% if user_signed_in? %>
+          <%= render :partial => 'layout/user_navigation' %>
+        <% else %>
+          <ul class="nav nav-list well">
+            <li><%= link_to 'Sign In', new_user_session_path() %></li>
+          </ul>
+        <% end %>
+        <% if admin_signed_in? %>
+          <% render :partial => 'layout/admin_navigation' %>
+        <% end %>
       </div>
       <div class="span10">
+        <% (flash.keys & [:notice, :alert]).each do |key| %>
+          <div class="alert <%= key == :alert ? 'alert-error' : '' %>">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <%= flash[key] %>
+          </div>
+        <% end %>
         <%= yield %>
       </div>
     </div>

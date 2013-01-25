@@ -1,8 +1,8 @@
 class AddToUser < ActiveRecord::Migration
   def change
-    change_table :users do |t|
-      t.string :name
-    end
+    add_column :users, :name, :string, :default => ''
+    add_column :users, :leave_time, :float
+    add_column :users, :sick_time, :float
 
     create_table :supervisor_users, :id => false do |t|
       t.integer :supervisor_id

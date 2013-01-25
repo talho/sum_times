@@ -1,4 +1,5 @@
 class SchedulesController < ApplicationController
+  respond_to :html
   # GET /schedules
   # GET /schedules.json
   def index
@@ -24,26 +25,22 @@ class SchedulesController < ApplicationController
   # GET /schedules/new
   # GET /schedules/new.json
   def new
-    @schedule = Schedule.new
+    @schedule = Schedule.new(user_id: current_user.id, start_date: Date.today)
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @schedule }
-    end
+    respond_with(@schedule)
   end
 
   # POST /schedules
   # POST /schedules.json
   def create
     @schedule = Schedule.new(params[:schedule])
+    @schedule.days = params[:days]
 
-    respond_to do |format|
-      if @schedule.save
-        format.html { redirect_to @schedule, notice: 'Schedule was successfully created.' }
-        format.json { render json: @schedule, status: :created, location: @schedule }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @schedule.errors, status: :unprocessable_entity }
+    if @schedule.save
+      redirect_to edit_profiles_path
+    else
+      respond_with(@schedule) do
+        format.html {render 'new'}
       end
     end
   end

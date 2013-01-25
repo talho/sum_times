@@ -9,6 +9,9 @@ gem 'sqlite3'
 
 gem 'devise'
 
+gem 'parallel588-bootstrap-timepicker-rails', :require => 'bootstrap-timepicker-rails'
+gem 'bootstrap-datepicker-rails'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -36,4 +39,6 @@ gem 'jquery-rails'
 # gem 'capistrano'
 
 # To use debugger
-# gem 'debugger'
+group :test do
+  gem 'debugger'
+end
