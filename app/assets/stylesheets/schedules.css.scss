@@ -1,0 +1,27 @@
+
+.calendar-table{
+  width: 100%;
+}
+
+.calendar-table td{
+  height: 100px;
+  border: 1px solid black;
+  vertical-align: top;
+  width: 14.2857%;
+}
+
+.calendar-table td.blank-date{
+  border: 0px;
+}
+
+.calendar-table td.today{
+  background: #D88;
+}
+
+.calendar-table td.holiday{
+  background: #8D8;
+}
+
+.calendar-table td.holiday.today{
+  background: #DD8;
+}

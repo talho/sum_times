@@ -1,5 +1,12 @@
-<p id="notice"><%= notice %></p>
+<h2>Leave Request</h2>
+<h3><%= @leave.user.name %></h3>
+<p><strong>Leave Type:</strong> <%= @leave.category.titleize %></p>
+<p>
+  <strong>Date:</strong> <%= l @leave.start_date, :format => :long %>
+  <%= raw(" through #{l @leave.end_date, :format => :long}") if @leave.end_date %>
+</p>
+<%= raw("<p><strong>Hours:</strong> #{@leave.hours}</p>") if @leave.hours %>
+<p><strong>Reason:</strong><br/><%= @leave.reason %></p>
+<p><%= @leave.approved? ? 'Approved' : 'Not Approved'%></p>
 
-
-<%= link_to 'Edit', edit_leafe_path(@leafe) %> |
-<%= link_to 'Back', leaves_path %>
+<%= link_to 'Cancel this leave request', leave_path(@leave), :method => :delete %>

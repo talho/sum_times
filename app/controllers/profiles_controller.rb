@@ -1,8 +1,10 @@
 class ProfilesController < ApplicationController
   # GET /profiles
   # GET /profiles.json
+  before_filter :authenticate_user!
 
   respond_to :js, only: [:update]
+  respond_to :html, except: [:update]
 
   def index
     @profiles = User.all
@@ -37,8 +39,11 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/1/edit
   def edit
-    @current_schedule = current_user.schedules.where('start_date <= :date AND (end_date > :date OR end_date IS NULL)', :date => Date.today).first
-    @future_schedules = current_user.schedules.where('start_date > :date', :date => Date.today)
+    @current_schedule = current_user.current_schedule
+    @future_schedules = current_user.future_schedules
+    @leaves = current_user.leaves.where("start_date > ?", Date.today)
+
+    respond_with(@current_schedule, @future_schedules, @leaves)
   end
 
   # POST /profiles

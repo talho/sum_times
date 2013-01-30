@@ -5,12 +5,13 @@ gem 'rails', '3.2.11'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'sqlite3'
+gem 'pg'
 
 gem 'devise'
 
 gem 'parallel588-bootstrap-timepicker-rails', :require => 'bootstrap-timepicker-rails'
 gem 'bootstrap-datepicker-rails'
+gem 'week_of_month'
 
 # Gems used only for assets and not required
 # in production environments by default.

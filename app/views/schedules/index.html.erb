@@ -1,21 +1,7 @@
-<h1>Listing schedules</h1>
-
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @schedules.each do |schedule| %>
-  <tr>
-    <td><%= link_to 'Show', schedule %></td>
-    <td><%= link_to 'Edit', edit_schedule_path(schedule) %></td>
-    <td><%= link_to 'Destroy', schedule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New Schedule', new_schedule_path %>
+<h2>All Schedules</h2>
+<div style="text-align:center;">
+  <%= link_to '<< ' + l(@date - 1.month, :format => :month_name), schedules_path(month: (@date - 1.month).month, year: (@date - 1.month).year), class: 'pull-left' %>
+  <%= l @date, :format => :month_name %> <%= @date.year %>
+  <%= link_to l(@date + 1.month, :format => :month_name) + ' >>', schedules_path(month: (@date + 1.month).month, year: (@date + 1.month).year), class: 'pull-right' %>
+</div>
+<%= render :partial => 'calendar' %>

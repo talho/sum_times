@@ -3,12 +3,12 @@
     <%= link_to raw('<i class="icon-cog"></i>'), edit_profiles_path, class: 'pull-right' %>
     <%= current_user.name %>
   </li>
-  <li class="active">My Schedule</li>
-  <li>Leave Request</li>
-  <li>I'm going to be late!</li>
+  <li><%= link_to 'My Schedule', schedule_path(current_user.id) %></li>
+  <li><%= link_to 'Leave Request', new_leave_path %></li>
+  <li><%= link_to "I'm going to be late!", lates_path, :method => :post, :confirm => "O Noes! Just click ok and it will all be alright (and everyone will know about your lateness)." %></li>
   <li class="nav-header">Coworkers</li>
-  <li>Office Schedule</li>
-  <li>Holidays</li>
+  <li><%= link_to 'Office Schedule', schedules_path %></li>
+  <li><%= link_to 'Holidays', holidays_path %></li>
   <li class="nav-header">Approvals</li>
   <li>Leave Requests</li>
   <li>Timesheets</li>

@@ -8,7 +8,7 @@ SumTimes::Application.routes.draw do
   resources :profiles, :except => [:edit, :update] do
     collection do
       get 'edit'
-      put '.' => 'profiles#update'
+      put '' => 'profiles#update'
     end
   end
   resources :timesheets

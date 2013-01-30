@@ -1,4 +1,7 @@
 class LeavesController < ApplicationController
+  before_filter :authenticate_user!
+
+  respond_to :html
   # GET /leaves
   # GET /leaves.json
   def index
@@ -13,53 +16,34 @@ class LeavesController < ApplicationController
   # GET /leaves/1
   # GET /leaves/1.json
   def show
-    @leafe = Leave.find(params[:id])
+    @leave = Leave.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @leafe }
-    end
+    respond_with(@leave)
   end
 
   # GET /leaves/new
   # GET /leaves/new.json
   def new
-    @leafe = Leave.new
+    @leave = Leave.new(user_id: current_user.id)
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @leafe }
-    end
-  end
-
-  # GET /leaves/1/edit
-  def edit
-    @leafe = Leave.find(params[:id])
+    respond_with(@leave)
   end
 
   # POST /leaves
   # POST /leaves.json
   def create
-    @leafe = Leave.new(params[:leafe])
-
-    respond_to do |format|
-      if @leafe.save
-        format.html { redirect_to @leafe, notice: 'Leave was successfully created.' }
-        format.json { render json: @leafe, status: :created, location: @leafe }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @leafe.errors, status: :unprocessable_entity }
-      end
-    end
+    @leave = Leave.new(params[:leave])
+    @leave.save
+    respond_with(@leave)
   end
 
   # PUT /leaves/1
   # PUT /leaves/1.json
   def update
-    @leafe = Leave.find(params[:id])
+    @leave = Leave.find(params[:id])
 
     respond_to do |format|
-      if @leafe.update_attributes(params[:leafe])
+      if @leave.update_attributes(params[:leafe])
         format.html { redirect_to @leafe, notice: 'Leave was successfully updated.' }
         format.json { head :no_content }
       else
@@ -72,12 +56,13 @@ class LeavesController < ApplicationController
   # DELETE /leaves/1
   # DELETE /leaves/1.json
   def destroy
-    @leafe = Leave.find(params[:id])
-    @leafe.destroy
+    @leave = Leave.find(params[:id])
+    @leave.destroy
 
-    respond_to do |format|
-      format.html { redirect_to leaves_url }
-      format.json { head :no_content }
+    if current_user.id = @leave.user_id
+      redirect_to edit_profiles_path
+    else
+      redirect_to leaves_path
     end
   end
 end

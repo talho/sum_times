@@ -12,5 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min
+//= bootstrap-timepicker
+//= bootstrap-datepicker
 //= require_tree .
+
+$(function(){
+  $('a[href$="' + window.location.pathname + '"]').closest('li').addClass('active')
+});

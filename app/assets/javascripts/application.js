@@ -12,4 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap-timepicker
+//= require bootstrap-datepicker
 //= require_tree .
+
+$(function(){
+  $('a[href$="' + window.location.pathname + '"]').closest('li').addClass('active')
+});

@@ -1,0 +1,39 @@
+
+<table class="calendar-table">
+  <tr>
+    <th><strong>Sunday</strong></th>
+    <th><strong>Monday</strong></th>
+    <th><strong>Tuesday</strong></th>
+    <th><strong>Wednesday</strong></th>
+    <th><strong>Thursday</strong></th>
+    <th><strong>Friday</strong></th>
+    <th><strong>Saturday</strong></th>
+  </tr>
+<% @date.week_split.each.with_index do |week_arr, i| %>
+  <tr>
+  <% week_arr.each do |day| %>
+    <% date = @date.change(day: day) %>
+    <% date_info = @daily_schedules[date] %>
+    <td class="<%= 'blank-date' if day.nil? %>
+               <%= 'today' if @date.month == Date.today.month && day == Date.today.day %>
+               <%= 'holiday' unless date_info.nil? || date_info[:holidays].blank? %>
+               ">
+      <% unless day.nil? %>
+        <%= date.day %><br/>
+        <% unless date_info.nil? %>
+          <% date_info[:schedules].each do |sched| %>
+            <% leave = date_info[:leaves].find{|l| l.user.id == sched.user.id} %>
+            <%= raw("#{sched.user.name}: #{sched.start}-#{sched.end}<br/>") unless leave && leave.hours(date) >= sched.hours %>
+          <% end if date_info[:holidays].blank? %>
+          <% date_info[:leaves].each do |leave| %>
+            <%= raw("#{leave.user.name}: Out #{leave.hours(date)} hours<br/>") if leave.hours(date) > 0 %>
+          <% end %>
+          <%= date_info[:holidays].map{|h| h.name}.join('<br/>') %>
+          <%= @lates.map{|l| "#{l.user.name} is running late" }.join('<br/>') if date.today? %>
+        <% end %>
+      <% end %>
+    </td>
+  <% end %>
+  </tr>
+<% end %>
+</table>

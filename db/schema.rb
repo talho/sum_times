@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(:version => 20130123212113) do
 
   create_table "schedules", :force => true do |t|
     t.integer  "user_id"
-    t.string   "days"
+    t.text     "days"
     t.date     "start_date"
     t.date     "end_date"
     t.datetime "created_at", :null => false

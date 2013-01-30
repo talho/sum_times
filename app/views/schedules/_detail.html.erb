@@ -1,8 +1,9 @@
-<div>
+<div class="profile-schedule">
   Start Date: <%= l schedule.start_date, format: :short %><br/>
   <% unless schedule.end_date.nil? %>
   End Date: <%= l schedule.end_date, format: :short %><br/>
   <% end %>
+  <%= link_to 'Delete Schedule', schedule_path(schedule), :method => :delete, :remote => true, :confirm => "Are you sure you want to delete this schedule? Action cannot be undone.", :class => 'delete-schedule' %>
   <ul class="unstyled">
   <% schedule.days.each do |key, val| %>
     <% if val["hours"] > 0 %>
