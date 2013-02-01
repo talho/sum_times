@@ -1,83 +1,47 @@
 class Admin::SupervisorsController < ApplicationController
+  before_filter :authenticate_admin!
+
+  respond_to :html
+
   # GET /admin/supervisors
   # GET /admin/supervisors.json
   def index
-    @admin_supervisors = Admin::Supervisor.all
+    @users = User.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @admin_supervisors }
-    end
-  end
-
-  # GET /admin/supervisors/1
-  # GET /admin/supervisors/1.json
-  def show
-    @admin_supervisor = Admin::Supervisor.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @admin_supervisor }
-    end
-  end
-
-  # GET /admin/supervisors/new
-  # GET /admin/supervisors/new.json
-  def new
-    @admin_supervisor = Admin::Supervisor.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @admin_supervisor }
-    end
+    respond_with(@users)
   end
 
   # GET /admin/supervisors/1/edit
   def edit
-    @admin_supervisor = Admin::Supervisor.find(params[:id])
-  end
+    @user = User.find(params[:id])
+    @supervisors = User.where("id != ?", params[:id])
+    @supervisors = @supervisors.where("id NOT IN (?)", @user.supervisors) unless @user.supervisors.blank?
 
-  # POST /admin/supervisors
-  # POST /admin/supervisors.json
-  def create
-    @admin_supervisor = Admin::Supervisor.new(params[:admin_supervisor])
-
-    respond_to do |format|
-      if @admin_supervisor.save
-        format.html { redirect_to @admin_supervisor, notice: 'Supervisor was successfully created.' }
-        format.json { render json: @admin_supervisor, status: :created, location: @admin_supervisor }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @admin_supervisor.errors, status: :unprocessable_entity }
-      end
-    end
+    respond_with(@user, @supervisors)
   end
 
   # PUT /admin/supervisors/1
   # PUT /admin/supervisors/1.json
   def update
-    @admin_supervisor = Admin::Supervisor.find(params[:id])
+    @user = User.find(params[:id])
+    User.where(id: params[:user][:supervisors]).each do |supervisor|
+      @user.supervisors << supervisor
+    end
 
-    respond_to do |format|
-      if @admin_supervisor.update_attributes(params[:admin_supervisor])
-        format.html { redirect_to @admin_supervisor, notice: 'Supervisor was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: "edit" }
-        format.json { render json: @admin_supervisor.errors, status: :unprocessable_entity }
-      end
+    respond_with @user do |format|
+      format.all {redirect_to admin_profile_path(@user.id)}
     end
   end
 
   # DELETE /admin/supervisors/1
   # DELETE /admin/supervisors/1.json
   def destroy
-    @admin_supervisor = Admin::Supervisor.find(params[:id])
-    @admin_supervisor.destroy
+    @user = User.find(params[:id])
+    @supervisor = User.find(params[:supervisor_id])
+    @user.supervisors.delete(@supervisor)
 
-    respond_to do |format|
-      format.html { redirect_to admin_supervisors_url }
-      format.json { head :no_content }
+    respond_with @user do |format|
+      format.all {redirect_to admin_profile_path(@user.id)}
     end
   end
 end

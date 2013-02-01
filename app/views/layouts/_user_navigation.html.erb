@@ -9,7 +9,9 @@
   <li class="nav-header">Coworkers</li>
   <li><%= link_to 'Office Schedule', schedules_path %></li>
   <li><%= link_to 'Holidays', holidays_path %></li>
-  <li class="nav-header">Approvals</li>
-  <li>Leave Requests</li>
-  <li>Timesheets</li>
+  <% unless current_user.supervises.blank? %>
+    <li class="nav-header">Approvals</li>
+    <li>Leave Requests</li>
+    <li>Timesheets</li>
+  <% end %>
 </ul>

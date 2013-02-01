@@ -12,14 +12,20 @@
       <div class="span2">
         <%# Render a menu of all of the neat stuff you can do with this app %>
         <% if user_signed_in? %>
-          <%= render :partial => 'layout/user_navigation' %>
+          <%= render :partial => 'layouts/user_navigation' %>
         <% else %>
           <ul class="nav nav-list well">
             <li><%= link_to 'Sign In', new_user_session_path() %></li>
           </ul>
         <% end %>
+        <% debugger %>
         <% if admin_signed_in? %>
-          <% render :partial => 'layout/admin_navigation' %>
+          <% render :partial => 'layouts/admin_navigation' %>
+        <% else %>
+          <ul class="nav nav-list well">
+            <li class="nav-header">Administrator</li>
+            <li><%= link_to 'Sign in as administrator', new_admin_session_path() %></li>
+          </ul>
         <% end %>
       </div>
       <div class="span10">

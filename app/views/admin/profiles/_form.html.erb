@@ -1,17 +1,15 @@
-<%= form_for(@admin_profile) do |f| %>
-  <% if @admin_profile.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@admin_profile.errors.count, "error") %> prohibited this admin_profile from being saved:</h2>
-
-      <ul>
-      <% @admin_profile.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
+<%= form_for @user, :url => (@user.persisted? ? admin_profile_path(@user.id) : admin_profiles_path), :method => (@user.persisted? ? :put : :post) do |f| %>
+  <% @user.errors.full_messages.each do |msg| %>
+    <p><%= msg %></p>
   <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :email %>
+  <%= f.text_field :email %>
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+  <%= f.label :password_confirmation %>
+  <%= f.password_field :password_confirmation %>
+  <br/>
+  <%= f.submit %>
 <% end %>

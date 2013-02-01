@@ -1,54 +1,50 @@
 class Admin::ProfilesController < ApplicationController
+  before_filter :authenticate_admin!
+
+  respond_to :html
+
   # GET /admin/profiles
   # GET /admin/profiles.json
   def index
-    @admin_profiles = Admin::Profile.all
+    @users = User.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @admin_profiles }
-    end
+    respond_with @users
   end
 
   # GET /admin/profiles/1
   # GET /admin/profiles/1.json
   def show
-    @admin_profile = Admin::Profile.find(params[:id])
+    @user = User.find(params[:id])
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @admin_profile }
-    end
+    respond_with @user
   end
 
   # GET /admin/profiles/new
   # GET /admin/profiles/new.json
   def new
-    @admin_profile = Admin::Profile.new
+    @user = User.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @admin_profile }
-    end
+    respond_with @user
   end
 
   # GET /admin/profiles/1/edit
   def edit
-    @admin_profile = Admin::Profile.find(params[:id])
+    @user = User.find(params[:id])
+
+    respond_with @user
   end
 
   # POST /admin/profiles
   # POST /admin/profiles.json
   def create
-    @admin_profile = Admin::Profile.new(params[:admin_profile])
+    @user = User.new(params[:user])
 
-    respond_to do |format|
-      if @admin_profile.save
-        format.html { redirect_to @admin_profile, notice: 'Profile was successfully created.' }
-        format.json { render json: @admin_profile, status: :created, location: @admin_profile }
+    @user.save
+    respond_with @user do |format|
+      if @user.errors.blank?
+        format.all {redirect_to admin_profile_path(@user.id)}
       else
-        format.html { render action: "new" }
-        format.json { render json: @admin_profile.errors, status: :unprocessable_entity }
+        format.all {render 'new'}
       end
     end
   end
@@ -56,15 +52,16 @@ class Admin::ProfilesController < ApplicationController
   # PUT /admin/profiles/1
   # PUT /admin/profiles/1.json
   def update
-    @admin_profile = Admin::Profile.find(params[:id])
+    params[:user].delete(:password) if params[:user][:password].blank?
+    params[:user].delete(:password_confirmation) if params[:user][:password_confirmation].blank?
+    @user = User.find(params[:id])
 
-    respond_to do |format|
-      if @admin_profile.update_attributes(params[:admin_profile])
-        format.html { redirect_to @admin_profile, notice: 'Profile was successfully updated.' }
-        format.json { head :no_content }
+    @user.update_attributes params[:user]
+    respond_with @user do |format|
+      if @user.errors.blank?
+        format.all {redirect_to admin_profile_path(@user.id)}
       else
-        format.html { render action: "edit" }
-        format.json { render json: @admin_profile.errors, status: :unprocessable_entity }
+        format.all {render 'edit'}
       end
     end
   end
@@ -72,12 +69,9 @@ class Admin::ProfilesController < ApplicationController
   # DELETE /admin/profiles/1
   # DELETE /admin/profiles/1.json
   def destroy
-    @admin_profile = Admin::Profile.find(params[:id])
-    @admin_profile.destroy
+    @user = User.find(params[:id])
+    @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to admin_profiles_url }
-      format.json { head :no_content }
-    end
+    redirect_to admin_profiles_path
   end
 end

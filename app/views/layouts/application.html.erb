@@ -19,7 +19,12 @@
           </ul>
         <% end %>
         <% if admin_signed_in? %>
-          <% render :partial => 'layouts/admin_navigation' %>
+          <%= render :partial => 'layouts/admin_navigation' %>
+        <% else %>
+          <ul class="nav nav-list well">
+            <li class="nav-header">Administrator</li>
+            <li><%= link_to 'Sign in as administrator', new_admin_session_path() %></li>
+          </ul>
         <% end %>
       </div>
       <div class="span10">

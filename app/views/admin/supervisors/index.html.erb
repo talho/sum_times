@@ -1,21 +1,26 @@
-<h1>Listing admin_supervisors</h1>
+<h2>Users and their supervisors</h2>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @admin_supervisors.each do |admin_supervisor| %>
-  <tr>
-    <td><%= link_to 'Show', admin_supervisor %></td>
-    <td><%= link_to 'Edit', edit_admin_supervisor_path(admin_supervisor) %></td>
-    <td><%= link_to 'Destroy', admin_supervisor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Supervisors</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %><br/>
+            <%= link_to 'Add Supervisor', edit_admin_supervisor_path(user.id) %>
+        </td>
+        <td>
+          <ul class="unstyled">
+            <% user.supervisors.each do |supervisor| %>
+              <li><%= supervisor.name %> (<%= link_to 'remove', admin_supervisor_path(user.id, :supervisor_id => supervisor.id), :method => :delete, :confirm => 'Are you sure you want to remove this supervisor?' %>)</li>
+            <% end %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  <tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Supervisor', new_admin_supervisor_path %>

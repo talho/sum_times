@@ -1,6 +1,8 @@
 <ul class="nav nav-list well">
-  <li class="active">User Profiles</li>
-  <li>Holidays</li>
+  <li class="nav-header">Administrator</li>
+  <li><%= link_to 'User Profiles', admin_profiles_path %></li>
+  <li><%= link_to 'Supervisors', admin_supervisors_path %></li>
+  <li><%= link_to 'Holidays', admin_holidays_path %></li>
   <li>Leave Requests</li>
   <li>Timesheets</li>
 </ul>

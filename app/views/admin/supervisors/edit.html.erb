@@ -1,6 +1,7 @@
-<h1>Editing admin_supervisor</h1>
+<h2>Add supervisors for <%= @user.name %></h2>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @admin_supervisor %> |
-<%= link_to 'Back', admin_supervisors_path %>
+<%= form_for @user, :url => admin_supervisor_path(@user.id), :method => :put do |f| %>
+  <%= f.label :supervisors %>
+  <%= f.collection_select :supervisors, @supervisors, :id, :name, {}, {:multiple => true, :name => 'user[supervisors][]'} %><br/>
+  <%= f.submit %>
+<% end %>

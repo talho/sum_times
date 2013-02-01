@@ -1,21 +1,27 @@
-<h1>Listing admin_profiles</h1>
+<h2>Users</h2>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
 
-<% @admin_profiles.each do |admin_profile| %>
-  <tr>
-    <td><%= link_to 'Show', admin_profile %></td>
-    <td><%= link_to 'Edit', edit_admin_profile_path(admin_profile) %></td>
-    <td><%= link_to 'Destroy', admin_profile, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= link_to user.name, admin_profile_path(user.id) %></td>
+      <td><%= user.email %></td>
+      <td><%= link_to 'Edit', edit_admin_profile_path(user.id) %></td>
+      <td><%= link_to 'Destroy', admin_profile_path(user.id), method: :delete, data: { confirm: 'Are you sure? This will delete this user and you will not be able to undo it.' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
 </table>
 
 <br />
 
-<%= link_to 'New Profile', new_admin_profile_path %>
+<%= link_to 'New User', new_admin_profile_path %>
