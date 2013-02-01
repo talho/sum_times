@@ -1,17 +1,21 @@
-<h1>Listing admin_holidays</h1>
+<h1>Holiday Schedule</h1>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Holiday</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th></th>
+    </tr>
+  </thead>
 
-<% @admin_holidays.each do |admin_holiday| %>
+<% @holidays.each do |holiday| %>
   <tr>
-    <td><%= link_to 'Show', admin_holiday %></td>
-    <td><%= link_to 'Edit', edit_admin_holiday_path(admin_holiday) %></td>
-    <td><%= link_to 'Destroy', admin_holiday, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to holiday.name, edit_admin_holiday_path(holiday.id) %></td>
+    <td><%= l holiday.start_date, :format => :short unless holiday.start_date.nil? %></td>
+    <td><%= l holiday.end_date, :format => :short unless holiday.end_date.nil? %></td>
+    <td><%= link_to 'Destroy', admin_holiday_path(holiday.id), method: :delete, data: { confirm: 'Are you sure you want to remove this holiday?' } %></td>
   </tr>
 <% end %>
 </table>

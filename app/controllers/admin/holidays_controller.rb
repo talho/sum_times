@@ -1,54 +1,41 @@
 class Admin::HolidaysController < ApplicationController
+  before_filter :authenticate_admin!
+
+  respond_to :html
   # GET /admin/holidays
   # GET /admin/holidays.json
   def index
-    @admin_holidays = Admin::Holiday.all
+    @holidays = Holiday.all
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @admin_holidays }
-    end
-  end
-
-  # GET /admin/holidays/1
-  # GET /admin/holidays/1.json
-  def show
-    @admin_holiday = Admin::Holiday.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @admin_holiday }
-    end
+    respond_with(@holidays)
   end
 
   # GET /admin/holidays/new
   # GET /admin/holidays/new.json
   def new
-    @admin_holiday = Admin::Holiday.new
+    @holiday = Holiday.new
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @admin_holiday }
-    end
+    respond_with(@holiday)
   end
 
   # GET /admin/holidays/1/edit
   def edit
-    @admin_holiday = Admin::Holiday.find(params[:id])
+    @holiday = Holiday.find(params[:id])
+
+    respond_with(@holiday)
   end
 
   # POST /admin/holidays
   # POST /admin/holidays.json
   def create
-    @admin_holiday = Admin::Holiday.new(params[:admin_holiday])
+    @holiday = Holiday.new(params[:holiday])
 
-    respond_to do |format|
-      if @admin_holiday.save
-        format.html { redirect_to @admin_holiday, notice: 'Holiday was successfully created.' }
-        format.json { render json: @admin_holiday, status: :created, location: @admin_holiday }
+    @holiday.save
+    respond_with(@holiday) do |format|
+      if @holiday.errors.blank?
+        format.all { redirect_to admin_holidays_path }
       else
-        format.html { render action: "new" }
-        format.json { render json: @admin_holiday.errors, status: :unprocessable_entity }
+        format.all { render 'new' }
       end
     end
   end
@@ -56,15 +43,14 @@ class Admin::HolidaysController < ApplicationController
   # PUT /admin/holidays/1
   # PUT /admin/holidays/1.json
   def update
-    @admin_holiday = Admin::Holiday.find(params[:id])
+    @holiday = Holiday.find(params[:id])
 
-    respond_to do |format|
-      if @admin_holiday.update_attributes(params[:admin_holiday])
-        format.html { redirect_to @admin_holiday, notice: 'Holiday was successfully updated.' }
-        format.json { head :no_content }
+    @holiday.update_attributes(params[:holiday])
+    respond_with(@holiday) do |format|
+      if @holiday.errors.blank?
+        format.all { redirect_to admin_holidays_path }
       else
-        format.html { render action: "edit" }
-        format.json { render json: @admin_holiday.errors, status: :unprocessable_entity }
+        format.all { render 'edit' }
       end
     end
   end
@@ -72,12 +58,11 @@ class Admin::HolidaysController < ApplicationController
   # DELETE /admin/holidays/1
   # DELETE /admin/holidays/1.json
   def destroy
-    @admin_holiday = Admin::Holiday.find(params[:id])
-    @admin_holiday.destroy
+    @holiday = Holiday.find(params[:id])
+    @holiday.destroy
 
-    respond_to do |format|
-      format.html { redirect_to admin_holidays_url }
-      format.json { head :no_content }
+    respond_with(@holiday) do |format|
+      format.all {redirect_to admin_holidays_path}
     end
   end
 end

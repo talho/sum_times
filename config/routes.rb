@@ -14,9 +14,9 @@ SumTimes::Application.routes.draw do
   resources :timesheets
 
   namespace :admin do
-    resources :holidays
+    resources :holidays, :except => [:show]
     resources :profiles
-    resources :supervisors
+    resources :supervisors, :only => [:index, :edit, :update, :destroy]
   end
 
   devise_for :admins

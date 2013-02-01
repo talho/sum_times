@@ -1,15 +1,28 @@
-<%= form_for(@admin_holiday) do |f| %>
-  <% if @admin_holiday.errors.any? %>
+<script>
+    $(document).on("focus", "[data-behavior='datepicker']", function(e){
+        $(this).datepicker({"format": "yyyy-mm-dd", "weekStart": 0, "autoclose": true});
+    });
+</script>
+
+<%= form_for @holiday, :url => @holiday.persisted? ? admin_holiday_path(@holiday.id) : admin_holidays_path do |f| %>
+  <% if @holiday.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@admin_holiday.errors.count, "error") %> prohibited this admin_holiday from being saved:</h2>
+      <h2><%= pluralize(@holiday.errors.count, "error") %> prohibited this admin_holiday from being saved:</h2>
 
       <ul>
-      <% @admin_holiday.errors.full_messages.each do |msg| %>
+      <% @holiday.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>
     </div>
   <% end %>
+
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <%= f.label :start_date %>
+  <%= f.text_field :start_date, data: {behavior: 'datepicker'} %>
+  <%= f.label :end_date %>
+  <%= f.text_field :end_date, data: {behavior: 'datepicker'} %>
 
   <div class="actions">
     <%= f.submit %>

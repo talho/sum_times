@@ -1,6 +1,6 @@
 SumTimes::Application.routes.draw do
 
-  get "holidays/index"
+  resources :holidays, :only => [:index]
 
   resources :schedules, :except => [:update, :edit, :delete]
   resources :lates
