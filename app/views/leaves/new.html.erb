@@ -8,7 +8,7 @@
 <%= form_for @leave do |f| %>
   <%= f.hidden_field :user_id %>
   <%= f.label :category %>
-  <%= f.select :category, options_for_select(['', 'sick', 'vacation']) %>
+  <%= f.select :category, options_for_select(['', 'sick', 'vacation', 'admin', 'unpaid']) %>
   <%= f.label :reason %>
   <%= f.text_area :reason, rows: 4 %>
   <%= f.label :hours %>

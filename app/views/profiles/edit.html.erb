@@ -29,7 +29,7 @@
 <div class="row-fluid">
   <div class="span6">
     <h4>Leave Requests</h4>
-    <b>Leave</b>: <%= current_user.leave_time %> hours / <b>Sick</b>: <%= current_user.sick_time %> hours
+    <b>Leave</b>: <%= current_user.vacation_hours %> hours / <b>Sick</b>: <%= current_user.sick_hours %> hours
     <ul>
       <% @leaves.each do |leave| %>
         <li><%= link_to l(leave.start_date) + (leave.end_date? ? " - " + l(leave.end_date) : ''), leave_path(leave) %> - <%= leave.hours %> hours - <%= leave.approved? ? 'Approved' : 'Unapproved' %></li>

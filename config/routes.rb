@@ -1,5 +1,4 @@
 SumTimes::Application.routes.draw do
-
   resources :holidays, :only => [:index]
 
   resources :schedules, :except => [:update, :edit, :delete]
@@ -11,12 +10,25 @@ SumTimes::Application.routes.draw do
       put '' => 'profiles#update'
     end
   end
-  resources :timesheets
+  resources :timesheets, :only => [:index, :show] do
+    member do
+      put 'submit'
+      put 'accept'
+      delete 'reject'
+      put 'regenerate'
+    end
+  end
 
   namespace :admin do
     resources :holidays, :except => [:show]
     resources :profiles
     resources :supervisors, :only => [:index, :edit, :update, :destroy]
+    resources :leave_transactions, :only => [:new, :create]
+    resources :timesheets, :only => [:index, :show] do
+      collection do
+        post 'generate'
+      end
+    end
   end
 
   devise_for :admins

@@ -11,12 +11,13 @@
 <div class="row-fluid">
   <div class="span6">
     <h4>Leave Requests</h4>
-    <b>Leave</b>: <%= @user.leave_time %> hours / <b>Sick</b>: <%= @user.sick_time %> hours
+    <b>Leave</b>: <%= @user.vacation_hours %> hours / <b>Sick</b>: <%= @user.sick_hours %> hours
     <ul>
       <% @user.leaves.each do |leave| %>
         <li><%= link_to l(leave.start_date) + (leave.end_date? ? " - " + l(leave.end_date) : ''), leave_path(leave) %> - <%= leave.hours %> hours - <%= leave.approved? ? 'Approved' : 'Unapproved' %></li>
       <% end %>
     </ul>
+    <%= link_to 'Adjust Leave', new_admin_leave_transaction_path(user_id: @user.id) %>
   </div>
   <div class="span6">
     <% unless @user.current_schedule.blank? %>

@@ -1,21 +1,28 @@
-<h1>Listing leaves</h1>
+<h2>Unapproved Leave Requests</h2>
 
-<table>
-  <tr>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @leaves.each do |leafe| %>
-  <tr>
-    <td><%= link_to 'Show', leafe %></td>
-    <td><%= link_to 'Edit', edit_leafe_path(leafe) %></td>
-    <td><%= link_to 'Destroy', leafe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Dates</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @leaves.each do |leave| %>
+      <tr>
+        <td><%= leave.user.name %></td>
+        <td><%= "#{leave.hours} hours - #{l leave.start_date, :format => :short}#{leave.end_date.nil? ? '' : (' - ' + l(leave.end_date, :format => :short))}" %></td>
+        <td><%= form_for leave, html: {:style => "margin: 0px;"} do |f| %>
+            <%= f.hidden_field :approved, :value => true %>
+            <%= f.submit 'Approve', :class => 'btn btn-success' %>
+            <% end %>
+        </td>
+        <td><%= form_for leave, :method => :delete, html: {:style => "margin: 0px;"} do |f| %>
+            <%= f.submit 'Deny', :class => 'btn btn-danger', confirm: 'Are you sure you wish to deny this? The leave request will be deleted' %>
+            <% end %>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
-
-<br />
-
-<%= link_to 'New Leave', new_leafe_path %>

@@ -1,5 +1,12 @@
-<p id="notice"><%= notice %></p>
-
-
-<%= link_to 'Edit', edit_timesheet_path(@timesheet) %> |
-<%= link_to 'Back', timesheets_path %>
+<h2>Timesheet</h2>
+<%= render :partial => 'timesheet', :locals => {timesheet: @timesheet} %>
+<% if @is_supervisor && !@timesheet.supervisor_approved? %>
+<p>Accept this timesheet if it is correct. Rejecting the timesheet will send it back to the employee</p>
+  <%= link_to 'Reject Timesheet', reject_timesheet_path(@timesheet.id), :method => :delete, :class => 'btn btn-danger' %>
+  <%= link_to 'Accept Timesheet', accept_timesheet_path(@timesheet.id), :method => :put, :class => 'btn btn-primary' %>
+<% end %>
+<% unless @is_supervisor || @timesheet.user_approved? %>
+<p>Make corrections via leave requests and schedule adjustments. Regenerate timesheet after you have made any creations. Submit timesheet when it is correct.</p>
+  <%= link_to 'Regenerate', regenerate_timesheet_path(@timesheet.id), :method => :put, :class => 'btn' %>
+  <%= link_to 'Submit Timesheet', submit_timesheet_path(@timesheet.id), :method => :put, :class => 'btn btn-primary' %>
+<% end %>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130123212113) do
+ActiveRecord::Schema.define(:version => 20130207223028) do
 
   create_table "admins", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
@@ -47,11 +47,20 @@ ActiveRecord::Schema.define(:version => 20130123212113) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "leave_transactions", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "category"
+    t.float    "hours"
+    t.date     "date"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "leaves", :force => true do |t|
     t.integer  "user_id"
     t.text     "reason"
     t.integer  "hours"
-    t.string   "type"
+    t.string   "category"
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "approved"
@@ -78,8 +87,19 @@ ActiveRecord::Schema.define(:version => 20130123212113) do
     t.integer  "month"
     t.integer  "supervisor_id"
     t.date     "approval_date"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+    t.boolean  "user_approved"
+    t.boolean  "supervisor_approved"
+    t.text     "schedule"
+    t.integer  "year"
+    t.float    "total_hours"
+    t.float    "worked_hours"
+    t.float    "holiday_hours"
+    t.float    "vacation_hours"
+    t.float    "sick_hours"
+    t.float    "admin_hours"
+    t.float    "unpaid_hours"
   end
 
   create_table "users", :force => true do |t|

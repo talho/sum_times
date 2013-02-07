@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable,
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
@@ -14,6 +14,10 @@ class User < ActiveRecord::Base
 
   has_many :schedules
   has_many :leaves
+  has_many :leave_requests, :through => :supervises, :source => :leaves
+  has_many :leave_transactions
+  has_many :timesheets
+  has_many :timesheets_to_accept, :through => :supervises, :source => :timesheets
 
   def current_schedule
     self.schedules.where('start_date <= :date AND (end_date > :date OR end_date IS NULL)', :date => Date.today).first
@@ -21,5 +25,18 @@ class User < ActiveRecord::Base
 
   def future_schedules
     self.schedules.where('start_date > :date', :date => Date.today)
+  end
+
+  def vacation_hours
+    self.transaction_hours('vacation')
+  end
+
+  def sick_hours
+    self.transaction_hours('sick')
+  end
+
+  protected
+  def transaction_hours(category)
+    self.leave_transactions.select('SUM(hours) as hours').where('date <= ?', Date.today).where(category: category).first[:hours]
   end
 end

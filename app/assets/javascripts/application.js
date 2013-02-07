@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require bootstrap-timepicker
-//= require bootstrap-datepicker
+//= require bootstrap-datepicker/core
 //= require_tree .
 
 $(function(){

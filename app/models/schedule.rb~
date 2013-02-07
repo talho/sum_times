@@ -45,7 +45,8 @@ class Schedule < ActiveRecord::Base
   end
 
   def self.total_hours(user_id, start_date, end_date)
-    schedules = self.over_dates(start_date, end_date).where(user_id: user_id).map(&:hours).sum
+    holidays = Holiday.where("(start_date = :start AND end_date IS NULL) OR (start_date >= :start AND end_date <= :end)", :start => start_date, :end => end_date)
+    self.over_dates(start_date, end_date).where(user_id: user_id).collect{|s| holidays.select{|h| h.start_date == s.date || (h.start_date <= s.date && h.end_date >= s.date)}.nil?}.map(&:hours).sum
   end
 
   private

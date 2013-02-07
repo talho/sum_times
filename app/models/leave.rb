@@ -6,6 +6,9 @@ class Leave < ActiveRecord::Base
   attr_accessor :date_hours
 
   after_initialize :init_accessors
+  after_update :create_leave_transaction
+
+  scope :unapproved, where("approved IS NOT true")
 
   def hours(date = nil)
     @date_hours[date] ||= self[:hours] || Schedule.total_hours(self.user_id, (date || self.start_date), (date || self.end_date))
@@ -14,5 +17,11 @@ class Leave < ActiveRecord::Base
   private
   def init_accessors
     @date_hours = {}
+  end
+
+  def create_leave_transaction
+    if self.approved_changed? && self.approved?
+      LeaveTransaction.create(user_id: self.user_id, category: self.category, date: self.start_date, hours: -1 * self.hours)
+    end
   end
 end

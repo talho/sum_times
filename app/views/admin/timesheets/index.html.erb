@@ -1,0 +1,13 @@
+<h2>Timesheets</h2>
+<div style="text-align:center;">
+  <%= link_to '<< ' + l(@date - 1.month, :format => :month_name), admin_timesheets_path(month: (@date - 1.month).month, year: (@date - 1.month).year), class: 'pull-left' %>
+  <%= l @date, :format => :month_name %> <%= @date.year %>
+  <%= link_to l(@date + 1.month, :format => :month_name) + ' >>', admin_timesheets_path(month: (@date + 1.month).month, year: (@date + 1.month).year), class: 'pull-right' %>
+</div>
+<ul>
+  <% @timesheets.each do |timesheet| %>
+    <li><%= link_to timesheet.user.name, admin_timesheet_path(timesheet) %> - <%= timesheet.supervisor_approved? ? "Approved" : timesheet.user_approved? ? "Waiting on supervisor" : "Waiting on employee" %></li>
+  <% end %>
+</ul>
+
+<%= link_to 'Generate timesheets for this month', generate_admin_timesheets_path(month: @date.month, year: @date.year), :method => :post %>

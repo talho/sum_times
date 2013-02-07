@@ -1,0 +1,10 @@
+<h2>Adjust Time</h2>
+<%= form_for @leave_transaction, :url => admin_leave_transactions_path do |f| %>
+  <%= f.hidden_field :user_id %>
+  <%= f.hidden_field :date %>
+  <%= f.label :category %>
+  <%= f.select :category, ['', 'vacation', 'sick'] %>
+  <%= f.label :hours %>
+  <%= f.text_field :hours %><span class="help-inline">A positive number adds leave time, a negative takes it away</span><br/>
+  <%= f.submit "Submit" %>
+<% end %>
