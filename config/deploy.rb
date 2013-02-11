@@ -3,7 +3,7 @@ set :default_stage, "production"
 require 'capistrano/ext/multistage'
 
 set :application, "sumtimes"
-set :repository,  "git@github.com:talho/sum_times.git"
+set :repository,  "git://github.com/talho/sum_times.git"
 set :scm, :git
 
 set :deploy_via, :remote_cache
