@@ -1,0 +1,8 @@
+set :user, 'talho'
+set :deploy_to, "/home/#{user}/#{application}"
+
+set :rails_env,   "production"
+set :unicorn_env, "production"
+set :app_env,     "production"
+
+server '192.168.1.1', :app, :web, :db, :primary => true
