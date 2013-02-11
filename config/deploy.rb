@@ -1,12 +1,13 @@
 set :stages, %w(production)
-set :default_stage, "staging"
+set :default_stage, "production"
 require 'capistrano/ext/multistage'
 
-set :application, "Sumtimes"
+set :application, "sumtimes"
 set :repository,  "git@github.com:talho/sum_times.git"
 set :scm, :git
 
 set :deploy_via, :remote_cache
+set :use_sudo, false
 set :rails_env, 'production'
 
 set :rvm_ruby_string, '1.9.3'
@@ -14,11 +15,12 @@ require "rvm/capistrano"
 require 'capistrano-unicorn'
 
 namespace :deploy do
-  task :symlink do
-    run "if [ -f #{shared_path}/unicorn/production.rb ] then rm #{release_path}/config/unicorn/production.rb; ln -fs #{shared_path}/unicorn/production.yml #{release_path}/config/unicorn/production.yml"
+  task :set_symlinks do
+    run "if [ -f #{shared_path}/unicorn/production.rb ] then rm #{release_path}/config/unicorn/production.rb; ln -fs #{shared_path}/unicorn/production.rb #{release_path}/config/unicorn/production.rb fi"
+    run "if [ -f #{shared_path}/database.yml ] then rm #{release_path}/database.yml; ln -fs #{shared_path}/database.yml #{release_path}/config/database.yml fi"
   end
 end
 
-after 'deploy:update_code', 'deploy:symlink'
+after 'deploy:update_code', 'deploy:set_symlinks'
 after 'deploy:restart', 'unicorn:reload' # app IS NOT preloaded
 after 'deploy:restart', 'unicorn:restart'  # app preloaded
