@@ -1,0 +1,20 @@
+<h2>Accruals</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Month</th>
+      <th>Year</th>
+      <th>Date Created</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @accruals.each do |accrual| %>
+      <tr>
+        <td><%= accrual.month %></td>
+        <td><%= accrual.year %></td>
+        <td><%= l accrual.created_at, :format => :long %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'Run Accruals', new_admin_accrual_path %>

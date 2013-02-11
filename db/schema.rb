@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130207223028) do
+ActiveRecord::Schema.define(:version => 20130208200415) do
+
+  create_table "accruals", :force => true do |t|
+    t.integer  "month"
+    t.integer  "year"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "admins", :force => true do |t|
     t.string   "email",                  :default => "", :null => false
@@ -118,6 +125,8 @@ ActiveRecord::Schema.define(:version => 20130207223028) do
     t.string   "name",                   :default => ""
     t.float    "leave_time"
     t.float    "sick_time"
+    t.float    "accrues_vacation"
+    t.float    "accrues_sick"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

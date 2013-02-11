@@ -1,0 +1,12 @@
+<h2>Generate Accrual</h2>
+
+<%= form_for @accrual, :url => admin_accruals_path do |f| %>
+  <%= f.error_messages %>
+  <%= f.label :month %>
+  <%= f.select :month, (1..12) %>
+  <%= f.label :year %>
+  <%= f.select :year, [1.year.ago.year, Date.today.year, 1.year.from_now.year] %>
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,4 +1,5 @@
 SumTimes::Application.routes.draw do
+
   resources :holidays, :only => [:index]
 
   resources :schedules, :except => [:update, :edit, :delete]
@@ -29,6 +30,7 @@ SumTimes::Application.routes.draw do
         post 'generate'
       end
     end
+    resources :accruals, :only => [:index, :new, :create]
   end
 
   devise_for :admins

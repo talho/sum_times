@@ -10,6 +10,10 @@
   <%= f.password_field :password %>
   <%= f.label :password_confirmation %>
   <%= f.password_field :password_confirmation %>
+  <%= f.label :accrues_vacation, "Vacation Accrual" %>
+  <%= f.text_field :accrues_vacation %>
+  <%= f.label :accrues_sick, "Sick Accrual" %>
+  <%= f.text_field :accrues_sick %>
   <br/>
   <%= f.submit %>
 <% end %>

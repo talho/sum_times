@@ -12,6 +12,7 @@ gem 'devise'
 gem 'parallel588-bootstrap-timepicker-rails', :require => 'bootstrap-timepicker-rails'
 gem 'bootstrap-datepicker-rails'
 gem 'week_of_month'
+gem 'dynamic_form'
 
 # Gems used only for assets and not required
 # in production environments by default.
