@@ -16,7 +16,7 @@ user 'talho', 'talho'
 # Fill path to your app
 working_directory app_path
 
-listen "tmp/sockets/unicorn.sock", :backlog => 64
+listen "#{app_path}/tmp/sockets/unicorn.sock", :backlog => 64
 
 # Should be 'production' by default, otherwise use other env
 rails_env = ENV['RAILS_ENV'] || 'production'
