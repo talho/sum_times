@@ -14,6 +14,7 @@ set :rvm_ruby_string, '1.9.3'
 require "rvm/capistrano"
 require 'capistrano-unicorn'
 require "bundler/capistrano"
+load 'deploy/assets'
 
 namespace :deploy do
   task :set_symlinks do

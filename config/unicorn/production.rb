@@ -9,13 +9,14 @@ app_path = "/home/talho/sumtimes"
 worker_processes 4
 preload_app true
 timeout 180
-listen "127.0.0.1:9000"
 
 # Spawn unicorn master worker for user apps (group: apps)
 user 'talho', 'talho'
 
 # Fill path to your app
 working_directory app_path
+
+listen "tmp/sockets/unicorn.sock", :backlog => 64
 
 # Should be 'production' by default, otherwise use other env
 rails_env = ENV['RAILS_ENV'] || 'production'
