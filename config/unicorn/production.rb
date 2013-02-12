@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 # Set your full path to application.
-app_path = "/home/talho/sumtimes"
+app_path = "/home/talho/sumtimes/current"
 
 # Set unicorn options
 worker_processes 4
