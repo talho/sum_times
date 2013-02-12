@@ -13,11 +13,12 @@ set :rails_env, 'production'
 set :rvm_ruby_string, '1.9.3'
 require "rvm/capistrano"
 require 'capistrano-unicorn'
+require "bundler/capistrano"
 
 namespace :deploy do
   task :set_symlinks do
-    run "if [ -f #{shared_path}/unicorn/production.rb ] then rm #{release_path}/config/unicorn/production.rb; ln -fs #{shared_path}/unicorn/production.rb #{release_path}/config/unicorn/production.rb fi"
-    run "if [ -f #{shared_path}/database.yml ] then rm #{release_path}/database.yml; ln -fs #{shared_path}/database.yml #{release_path}/config/database.yml fi"
+    run "if [ -f #{shared_path}/unicorn/production.rb ]; then rm #{release_path}/config/unicorn/production.rb; ln -fs #{shared_path}/unicorn/production.rb #{release_path}/config/unicorn/production.rb; fi"
+    run "ln -fs #{shared_path}/database.yml #{release_path}/config/database.yml"
   end
 end
 
