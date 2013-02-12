@@ -38,7 +38,6 @@ SumTimes::Application.routes.draw do
 
   root :to => "schedules#index"
 
-  default_url_options[:host] = ActionMailer::Base.default_url_options[:host]
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
