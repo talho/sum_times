@@ -6,6 +6,8 @@ set :application, "sumtimes"
 set :repository,  "git://github.com/talho/sum_times.git"
 set :scm, :git
 
+set(:deploy_to) { "/home/talho/#{application}" }
+
 set :deploy_via, :remote_cache
 set :use_sudo, false
 set :rails_env, 'production'
