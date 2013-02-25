@@ -32,7 +32,7 @@ class Timesheet < ActiveRecord::Base
         self.sick_hours += sick = leaves.select{|l| l.category == 'sick'}.map(&:hours).sum
         self.admin_hours += admin = leaves.select{|l| l.category == 'admin'}.map(&:hours).sum
         self.unpaid_hours += unpaid = leaves.select{|l| l.category == 'unpaid'}.map(&:hours).sum
-        self.holiday_hours += holiday = holiday.present? ? sched.hours : 0
+        self.holiday_hours += holiday = holiday.present? ? 8 : 0
         self.worked_hours += norm = [sched.hours  - vac - sick - admin - unpaid - holiday, 0].max
         self.total_hours += vac + sick + admin + holiday + norm
         holder[sched.date] = {worked_hours: norm, vacation_hours: vac, sick_hours: sick, admin_hours: admin, unpaid_hours: unpaid, holiday_hours: holiday}
