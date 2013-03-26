@@ -13,7 +13,7 @@ set :use_sudo, false
 set :rails_env, 'production'
 set :keep_releases, 5
 
-set :rvm_ruby_string, '1.9.3'
+set :rvm_ruby_string, '2.0.0'
 require "rvm/capistrano"
 require 'capistrano-unicorn'
 require "bundler/capistrano"

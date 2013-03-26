@@ -13,9 +13,13 @@
   </thead>
   <tbody>
     <% timesheet.schedule.each do |date, val| %>
-      <tr>
+      <tr data-date="<%= date %>">
         <td><%= Date.parse(date).day %></td>
-        <td><%= val["worked_hours"] if val["worked_hours"] > 0 %></td>
+        <td>
+          <% if user %><button class="btn btn-info btn-mini worked-minus"><i class="icon-minus"></i></button><% end %>
+          <span class="worked_hours"><%= val["worked_hours"] if val["worked_hours"] > 0 %></span>
+          <% if user %><button class="btn btn-info btn-mini worked-plus"><i class="icon-plus"></i></button><% end %>
+        </td>
         <td><%= val["holiday_hours"] if val["holiday_hours"] > 0 %></td>
         <td><%= val["vacation_hours"] if val["vacation_hours"] > 0 %></td>
         <td><%= val["sick_hours"] if val["sick_hours"] > 0 %></td>
@@ -24,8 +28,8 @@
       </tr>
     <% end %>
     <tr>
-      <td>Total: <%= timesheet.total_hours %></td>
-      <td><%= timesheet.worked_hours %></td>
+      <td>Total: <span class="total_hours"><%= timesheet.total_hours %></span></td>
+      <td><span class="total_worked_hours"><%= timesheet.worked_hours %></span></td>
       <td><%= timesheet.holiday_hours if timesheet.holiday_hours > 0 %></td>
       <td><%= timesheet.vacation_hours if timesheet.vacation_hours > 0 %></td>
       <td><%= timesheet.sick_hours if timesheet.sick_hours > 0 %></td>

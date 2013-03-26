@@ -18,6 +18,21 @@ class TimesheetsController < ApplicationController
     respond_with(@timesheet, @is_supervisor)
   end
 
+  def update
+    # user can update the timesheet to change the hours worked. recalculate the total hours worked and the total hours server side
+    @timesheet = current_user.timesheets.where(id: params[:id]).first
+
+    schedule = @timesheet.schedule
+
+    params[:schedule].each do |day, v|
+
+    end
+
+    respond_with(@timesheet) do |format|
+      format.any { render :nothing => true}
+    end
+  end
+
   def submit
     @timesheet = current_user.timesheets.find(params[:id])
     @timesheet.update_attributes user_approved: true

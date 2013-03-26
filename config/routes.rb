@@ -11,7 +11,7 @@ SumTimes::Application.routes.draw do
       put '' => 'profiles#update'
     end
   end
-  resources :timesheets, :only => [:index, :show] do
+  resources :timesheets, :only => [:index, :show, :update] do
     member do
       put 'submit'
       put 'accept'

@@ -47,7 +47,4 @@ group :development do
 end
 
 
-# To use debugger
-group :test do
-  gem 'debugger'
-end
+gem "debugger", :group => [:development, :test]

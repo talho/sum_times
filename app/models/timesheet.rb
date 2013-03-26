@@ -25,18 +25,16 @@ class Timesheet < ActiveRecord::Base
     holder = {}
     self.total_hours = self.worked_hours = self.holiday_hours = self.vacation_hours = self.sick_hours = self.admin_hours = self.unpaid_hours = 0
     sched_days.each do |sched|
-      if sched.hours > 0
-        leaves = Leave.where(user_id: self.user_id).where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date)
-        holiday = Holiday.where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date).first
-        self.vacation_hours += vac = leaves.select{|l| l.category == 'vacation'}.map(&:hours).sum
-        self.sick_hours += sick = leaves.select{|l| l.category == 'sick'}.map(&:hours).sum
-        self.admin_hours += admin = leaves.select{|l| l.category == 'admin'}.map(&:hours).sum
-        self.unpaid_hours += unpaid = leaves.select{|l| l.category == 'unpaid'}.map(&:hours).sum
-        self.holiday_hours += holiday = holiday.present? ? 8 : 0
-        self.worked_hours += norm = [sched.hours  - vac - sick - admin - unpaid - holiday, 0].max
-        self.total_hours += vac + sick + admin + holiday + norm
-        holder[sched.date] = {worked_hours: norm, vacation_hours: vac, sick_hours: sick, admin_hours: admin, unpaid_hours: unpaid, holiday_hours: holiday}
-      end
+      leaves = Leave.where(user_id: self.user_id).where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date)
+      holiday = Holiday.where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date).first
+      self.vacation_hours += vac = leaves.select{|l| l.category == 'vacation'}.map(&:hours).sum
+      self.sick_hours += sick = leaves.select{|l| l.category == 'sick'}.map(&:hours).sum
+      self.admin_hours += admin = leaves.select{|l| l.category == 'admin'}.map(&:hours).sum
+      self.unpaid_hours += unpaid = leaves.select{|l| l.category == 'unpaid'}.map(&:hours).sum
+      self.holiday_hours += holiday = holiday.present? ? 8 : 0
+      self.worked_hours += norm = [sched.hours  - vac - sick - admin - unpaid - holiday, 0].max
+      self.total_hours += vac + sick + admin + holiday + norm
+      holder[sched.date] = {worked_hours: norm, vacation_hours: vac, sick_hours: sick, admin_hours: admin, unpaid_hours: unpaid, holiday_hours: holiday}
     end
     self.schedule = holder
   end
