@@ -7,7 +7,8 @@ $(function(){
     $(document).on('click', '.worked-plus', this.addTime);
   }
 
-  var timeout = null;
+  var timeout = null,
+      changed_data = {};
 
   var changeWorkedTarget = function(amt){
     var row = $(this).closest('tr'),
@@ -24,6 +25,7 @@ $(function(){
     total_hours = (isNaN(total_hours) ? 0 : total_hours) + amt;
 
     if(worked_hours >= 0){
+      changed_data[date] = worked_hours;
       worked.html(worked_hours.toFixed(1));
       total_worked.html(total_worked_hours.toFixed(1));
       total.html(total_hours.toFixed(1));
@@ -34,7 +36,11 @@ $(function(){
 
       timeout = setTimeout(function(){
         timeout = null;
-        console.log('sent ajax update');
+        $.ajax({
+          type: 'PUT',
+          data: {schedule: changed_data}
+        });
+        changed_data = {};
       }, 500)
     }
   }

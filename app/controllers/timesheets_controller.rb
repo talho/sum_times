@@ -24,9 +24,15 @@ class TimesheetsController < ApplicationController
 
     schedule = @timesheet.schedule
 
-    params[:schedule].each do |day, v|
-
+    params[:schedule].each do |date, v|
+      dif = v.to_f - schedule[date]["worked_hours"]
+      schedule[date]["worked_hours"] = v.to_f
+      @timesheet.worked_hours += dif
+      @timesheet.total_hours += dif
     end
+
+    @timesheet.schedule = schedule
+    @timesheet.save
 
     respond_with(@timesheet) do |format|
       format.any { render :nothing => true}
