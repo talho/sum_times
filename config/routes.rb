@@ -25,6 +25,7 @@ SumTimes::Application.routes.draw do
     resources :profiles
     resources :supervisors, :only => [:index, :edit, :update, :destroy]
     resources :leave_transactions, :only => [:new, :create]
+    resources :schedules, :except => [:index, :show]
     resources :timesheets, :only => [:index, :show] do
       collection do
         post 'generate'

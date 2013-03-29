@@ -7,7 +7,7 @@ class Schedule < ActiveRecord::Base
   after_save :close_previous_schedule
 
   def days
-    self[:days].nil? ? {} : JSON.parse(self[:days])
+    @days ||= self[:days].nil? ? {} : JSON.parse(self[:days])
   end
 
   def days=(in_days)
@@ -25,12 +25,16 @@ class Schedule < ActiveRecord::Base
     @date ||= self[:date] ? Date.parse(self[:date]) : nil
   end
 
+  def date_index
+    (self.date - self.start_date.days_to_week_start(:sunday).days.ago.to_date).to_i % self.days.length
+  end
+
   def start
-    self.days[self.date.days_to_week_start(:sunday).to_s]["start"]
+    self.days[self.date_index.to_s]["start"]
   end
 
   def end
-    self.days[self.date.days_to_week_start(:sunday).to_s]["end"]
+    self.days[self.date_index.to_s]["end"]
   end
 
   def hours

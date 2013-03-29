@@ -22,14 +22,15 @@
   <div class="span6">
     <% unless @user.current_schedule.blank? %>
       <h4>Current Schedule</h4>
-      <%= render :partial => 'schedules/detail', locals: {schedule: @user.current_schedule} %>
+      <%= render :partial => 'schedules/detail', locals: {schedule: @user.current_schedule, delete_path_local: admin_schedule_path(@user.current_schedule), edit_path_local: edit_admin_schedule_path(@user.current_schedule.id)} %>
     <% end %>
     <% unless @user.future_schedules.blank? %>
       <h5>Coming Schedules</h5>
       <% @user.future_schedules.each do |schedule| %>
-        <%= render :partial => 'schedules/detail', locals: {schedule: schedule} %>
+        <%= render :partial => 'schedules/detail', locals: {schedule: schedule, delete_path_local: admin_schedule_path(schedule), edit_path_local: edit_admin_schedule_path(schedule.id)} %>
       <% end %>
     <% end %>
+    <%= link_to 'Create New Schedule', new_admin_schedule_path(user_id: @user.id) %>
   </div>
 </div>
 

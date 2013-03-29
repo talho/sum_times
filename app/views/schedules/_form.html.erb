@@ -1,0 +1,69 @@
+  <script>
+    $(function(){
+      $('.bootstrap-timepicker-component.weekday input').timepicker({defaultTime: 'value'});
+      $('.bootstrap-timepicker-component.weekend input').timepicker({defaultTime: false});
+
+      $('#second-week-btn').click(function(){
+        var week_holder = $(this).parents('.week-holder');
+        var tab = $('#week1 .week-holder').clone();
+
+        tab.find('input, select').each(function(){
+          var name = $(this).attr('name');
+          var i = name.match(/\d/)[0]*1;
+          $(this).attr('name', name.replace(/\d/, i+7))
+          $(this).attr('id', name.replace(/\d/, i+7))
+        });
+
+        week_holder.html(tab);
+        $('.week-label').removeClass('hide');
+
+        $('#week2 .bootstrap-timepicker-component.weekday input').timepicker({defaultTime: 'value'});
+        $('#week2 .bootstrap-timepicker-component.weekend input').timepicker({defaultTime: false});
+      });
+
+      $(document).on("focus", "[data-behavior='datepicker']", function(e){
+          $(this).datepicker({"format": "yyyy-mm-dd", "weekStart": 0, "autoclose": true});
+      });
+    });
+  </script>
+
+  <%= f.hidden_field :user_id %>
+  <%= f.label :start_date %>
+  <%= f.text_field :start_date, data: {behavior: 'datepicker'} %>
+
+  <div class="row-fluid">
+    <div id="week1" class="span5">
+      <div class="week-label hide">Week 1</div>
+      <div class="week-holder">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Day</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Lunch*</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% (0..6).each do |num_day| %>
+              <tr>
+                <td><%= Date::DAYNAMES[num_day] %></td>
+                <td class="input-append bootstrap-timepicker-component <%= [0,6].include?(num_day) ? 'weekend' : 'weekday' %>"><%= text_field_tag "days[#{num_day}][start]", [0,6].include?(num_day) ? "" : "8:00 AM", class: 'input-small' %><span class="add-on"><i class="icon-time"></i></span></td>
+                <td class="input-append bootstrap-timepicker-component <%= [0,6].include?(num_day) ? 'weekend' : 'weekday' %>"><%= text_field_tag "days[#{num_day}][end]", [0,6].include?(num_day) ? "" : "5:00 PM", class: 'input-small' %><span class="add-on"><i class="icon-time"></i></span></td>
+                <td><%= select_tag "days[#{num_day}][lunch]", options_for_select([['1 Hour Lunch', 1], ['30 Minute Lunch', 0.5], ['No Lunch', 0]], 1), class: 'input-medium' %></td>
+              </tr>
+            <% end %>
+          <tbody>
+        </table>
+      </div>
+      <p class=".muted">* Lunch is 60 minutes unless otherwise specified.</p>
+    </div>
+    <div id="week2" class="span5">
+      <div class="week-label hide">Week 2</div>
+      <div class="week-holder">
+        <a id="second-week-btn" href="#">Add Second Week</a>
+      </div>
+    </div>
+  </div>
+
+  <%= f.submit %>

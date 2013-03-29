@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
   has_many :timesheets_to_accept, :through => :supervises, :source => :timesheets
 
   def current_schedule
-    self.schedules.where('start_date <= :date AND (end_date > :date OR end_date IS NULL)', :date => Date.today).first
+    self.schedules.where('start_date <= :date AND (end_date >= :date OR end_date IS NULL)', :date => Date.today).first
   end
 
   def future_schedules

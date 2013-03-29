@@ -3,11 +3,14 @@
   <% unless schedule.end_date.nil? %>
   End Date: <%= l schedule.end_date, format: :short %><br/>
   <% end %>
-  <%= link_to 'Delete Schedule', schedule_path(schedule), :method => :delete, :remote => true, :confirm => "Are you sure you want to delete this schedule? Action cannot be undone.", :class => 'delete-schedule' if schedule.user_id == current_user.id %>
+  <% if defined? edit_path_local %>
+  <%= link_to 'Edit Schedule', edit_path_local %><br/>
+  <% end %>
+  <%= link_to 'Delete Schedule', defined?(delete_path_local) ? delete_path_local : schedule_path(schedule), :method => :delete, :remote => true, :confirm => "Are you sure you want to delete this schedule? Action cannot be undone.", :class => 'delete-schedule' if schedule.user_id == current_user.id %>
   <ul class="unstyled">
   <% schedule.days.each do |key, val| %>
     <% if val["hours"] > 0 %>
-      <li><%= Date::DAYNAMES[key.to_i] %>: <%= val["hours"] %> hours, <%= val["start"] %> - <%= val["end"] %>, <%= val["lunch"] %> hour lunch</li>
+      <li><%= Date::DAYNAMES[key.to_i%7] %>: <%= val["hours"] %> hours, <%= val["start"] %> - <%= val["end"] %>, <%= val["lunch"] %> hour lunch</li>
     <% end %>
   <% end %>
   </ul>

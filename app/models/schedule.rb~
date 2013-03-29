@@ -7,7 +7,7 @@ class Schedule < ActiveRecord::Base
   after_save :close_previous_schedule
 
   def days
-    self[:days].nil? ? {} : JSON.parse(self[:days])
+    @days ||= self[:days].nil? ? {} : JSON.parse(self[:days])
   end
 
   def days=(in_days)
@@ -25,12 +25,16 @@ class Schedule < ActiveRecord::Base
     @date ||= self[:date] ? Date.parse(self[:date]) : nil
   end
 
+  def date_index
+    (self.date - self.start_date).to_i % self.days.length
+  end
+
   def start
-    self.days[self.date.days_to_week_start(:sunday).to_s]["start"]
+    self.days[self.date_index.to_s]["start"]
   end
 
   def end
-    self.days[self.date.days_to_week_start(:sunday).to_s]["end"]
+    self.days[self.date_index.to_s]["end"]
   end
 
   def hours
@@ -46,7 +50,7 @@ class Schedule < ActiveRecord::Base
 
   def self.total_hours(user_id, start_date, end_date)
     holidays = Holiday.where("(start_date = :start AND end_date IS NULL) OR (start_date >= :start AND end_date <= :end)", :start => start_date, :end => end_date)
-    self.over_dates(start_date, end_date).where(user_id: user_id).collect{|s| holidays.select{|h| h.start_date == s.date || (h.start_date <= s.date && h.end_date >= s.date)}.nil?}.map(&:hours).sum
+    self.over_dates(start_date, end_date).where(user_id: user_id).select{|s| holidays.index{|h| h.start_date == s.date || (h.start_date <= s.date && h.end_date >= s.date)}.nil?}.map(&:hours).sum
   end
 
   private
