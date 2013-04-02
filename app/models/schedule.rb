@@ -12,7 +12,7 @@ class Schedule < ActiveRecord::Base
 
   def days=(in_days)
     in_days.each do |key, val|
-      val["hours"] = (val["start"].blank? || val["end"].blank?) ? 0 : ((Time.parse(val["end"]) - Time.parse(val["start"]))/3600 - val["lunch"].to_i)
+      val["hours"] = (val["start"].blank? || val["end"].blank?) ? 0 : ((Time.parse(val["end"]) - Time.parse(val["start"]))/3600 - val["lunch"].to_f)
     end
     self[:days] = in_days.to_json
   end
