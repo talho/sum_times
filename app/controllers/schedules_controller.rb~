@@ -9,7 +9,7 @@ class SchedulesController < ApplicationController
     year = params[:year].to_i unless params[:year].blank?
     @date = Date.today.at_beginning_of_month.change(:month => month, :year => year )
 
-    @lates = Late.where(date: Date.today) if @date.month = Date.today.month
+    @lates = Late.where(date: Date.today) if @date.month == Date.today.month
 
     @daily_schedules = DailySchedule.new
     add_user_schedules(Schedule.over_dates(@date.at_beginning_of_month, @date.at_end_of_month))
@@ -27,12 +27,14 @@ class SchedulesController < ApplicationController
     year = params[:year].to_i unless params[:year].blank?
     @date = Date.today.at_beginning_of_month.change(:month => month, :year => year )
 
-    @lates = Late.where(user_id: current_user.id, date: Date.today) if @date.month = Date.today.month
+    @lates = Late.where(user_id: current_user.id, date: Date.today) if @date.month == Date.today.month
 
     @daily_schedules = DailySchedule.new
     add_user_schedules(Schedule.over_dates(@date.at_beginning_of_month, @date.at_end_of_month).where(user_id: params[:id]))
     add_to_schedules(Holiday.where(''), :holidays)
     add_to_schedules(Leave.where(user_id: current_user.id), :leaves)
+
+    debugger
 
     respond_with(@daily_schedules, @date, @lates)
   end

@@ -6,9 +6,7 @@
   <li><%= link_to 'My Schedule', schedule_path(current_user.id) %></li>
   <li><%= link_to 'Leave Request', new_leave_path %></li>
   <li><%= link_to "I'm going to be late!", lates_path, :method => :post, :confirm => "O Noes! Just click ok and it will all be alright (and everyone will know about your lateness)." %></li>
-  <% if current_user.timesheets.waiting_for_user.first.present? %>
-  <li><%= link_to "My Timesheet", timesheet_path(current_user.timesheets.waiting_for_user.first.id) %></li>
-  <% end %>
+  <li><%= link_to "My Timesheet", current_timesheets_path %></li>
   <li class="nav-header">Coworkers</li>
   <li><%= link_to 'Office Schedule', schedules_path %></li>
   <li><%= link_to 'Holidays', holidays_path %></li>

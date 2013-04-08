@@ -5,6 +5,9 @@ class Leave < ActiveRecord::Base
 
   attr_accessor :date_hours
 
+  after_save :notify_timesheet
+  after_destroy :notify_timesheet
+
   after_initialize :init_accessors
   after_update :create_leave_transaction
 
@@ -23,5 +26,9 @@ class Leave < ActiveRecord::Base
     if self.approved_changed? && self.approved?
       LeaveTransaction.create(user_id: self.user_id, category: self.category, date: self.start_date, hours: -1 * self.hours)
     end
+  end
+
+  def notify_timesheet
+    Timesheet.leave_added(self)
   end
 end

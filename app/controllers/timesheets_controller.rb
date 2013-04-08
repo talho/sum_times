@@ -8,6 +8,19 @@ class TimesheetsController < ApplicationController
     respond_with(@timesheets)
   end
 
+  def current
+    unless current_user.timesheets.waiting_for_user.empty?
+      redirect_to timesheet_path(current_user.timesheets.waiting_for_user.first.id)
+    else
+      timesheet = current_user.timesheets.where(month: Date.today.month, year: Date.today.year).first_or_initialize
+      unless timesheet.persisted?
+        timesheet.generate_schedule
+        timesheet.save
+      end
+      redirect_to timesheet_path(timesheet)
+    end
+  end
+
   def show
     @timesheet = current_user.timesheets.where(id: params[:id]).first
     unless @timesheet

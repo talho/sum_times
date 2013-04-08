@@ -12,6 +12,7 @@ SumTimes::Application.routes.draw do
     end
   end
   resources :timesheets, :only => [:index, :show, :update] do
+    get 'current', on: :collection
     member do
       put 'submit'
       put 'accept'

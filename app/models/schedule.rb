@@ -5,6 +5,7 @@ class Schedule < ActiveRecord::Base
   belongs_to :user
 
   after_save :close_previous_schedule
+  after_save :notify_timesheet
 
   def days
     @days ||= self[:days].nil? ? {} : JSON.parse(self[:days])
@@ -26,7 +27,7 @@ class Schedule < ActiveRecord::Base
   end
 
   def date_index
-    (self.date - self.start_date.days_to_week_start(:sunday).days.ago.to_date).to_i % self.days.length
+    (self.date - (self.start_date - self.start_date.days_to_week_start(:sunday))).to_i % self.days.length
   end
 
   def start
@@ -57,5 +58,9 @@ class Schedule < ActiveRecord::Base
   def close_previous_schedule
     schedule = Schedule.where(user_id: self.user_id, end_date: nil).where("start_date < ?", self.start_date).order("start_date DESC").first # make this a bit smarter to ensure that schedules can't overlap
     schedule.update_attributes(end_date: self.start_date - 1.day) unless schedule.nil?
+  end
+
+  def notify_timesheet
+    Timesheet.schedule_changed(self)
   end
 end

@@ -27,8 +27,8 @@ class LeavesController < ApplicationController
   end
 
   # POST /leaves
-  # POST /leaves.json
   def create
+  # POST /leaves.json
     @leave = Leave.new(params[:leave])
     @leave.save
     respond_with(@leave)

@@ -14,7 +14,7 @@
   <tbody>
     <% timesheet.schedule.each do |date, val| %>
       <tr data-date="<%= date %>">
-        <td><%= Date.parse(date).day %></td>
+        <td><%= Date.parse(date).strftime('%a') %> <%= Date.parse(date).day %></td>
         <td>
           <% if user %><button class="btn btn-info btn-mini worked-minus"><i class="icon-minus"></i></button><% end %>
           <span class="worked_hours"><%= val["worked_hours"] if val["worked_hours"] > 0 %></span>
