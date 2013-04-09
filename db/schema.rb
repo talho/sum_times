@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130208200415) do
+ActiveRecord::Schema.define(:version => 20130408203548) do
 
   create_table "accruals", :force => true do |t|
     t.integer  "month"
@@ -94,8 +94,8 @@ ActiveRecord::Schema.define(:version => 20130208200415) do
     t.integer  "month"
     t.integer  "supervisor_id"
     t.date     "approval_date"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.boolean  "user_approved"
     t.boolean  "supervisor_approved"
     t.text     "schedule"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(:version => 20130208200415) do
     t.float    "sick_hours"
     t.float    "admin_hours"
     t.float    "unpaid_hours"
+    t.boolean  "ready_for_submission"
   end
 
   create_table "users", :force => true do |t|

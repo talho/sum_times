@@ -6,7 +6,7 @@
 </div>
 <ul>
   <% @timesheets.each do |timesheet| %>
-    <li><%= link_to timesheet.user.name, admin_timesheet_path(timesheet) %> - <%= timesheet.supervisor_approved? ? "Approved" : timesheet.user_approved? ? "Waiting on supervisor" : "Waiting on employee" %></li>
+    <li><%= link_to timesheet.user.name, admin_timesheet_path(timesheet) %> - <%= !timesheet.ready_for_submission? ? 'Not set to submit' : timesheet.supervisor_approved? ? "Approved" : timesheet.user_approved? ? "Waiting on supervisor" : "Waiting on employee" %></li>
   <% end %>
 </ul>
 

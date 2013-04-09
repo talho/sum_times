@@ -8,5 +8,5 @@
 <% unless @is_supervisor || @timesheet.user_approved? %>
 <p>Make corrections via leave requests and schedule adjustments. Regenerate timesheet after you have made any creations. Submit timesheet when it is correct.</p>
   <%= link_to 'Reset', regenerate_timesheet_path(@timesheet.id), :method => :put, :class => 'btn', :confirm => 'Are you sure you want to reset this timesheet? It will be regenerated from your schedule and sick/leave but will not have any customizations.' %>
-  <%= link_to 'Submit Timesheet', submit_timesheet_path(@timesheet.id), :method => :put, :class => 'btn btn-primary' %>
+  <%= link_to 'Submit Timesheet', submit_timesheet_path(@timesheet.id), :method => :put, :class => 'btn btn-primary' if @timesheet.ready_for_submission? %>
 <% end %>

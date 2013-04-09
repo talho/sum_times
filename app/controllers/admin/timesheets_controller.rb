@@ -20,7 +20,11 @@ class Admin::TimesheetsController < ApplicationController
     year = params[:year].blank? ? params[:year] : Date.today.year
 
     User.all.each do |user|
-      Timesheet.where(user_id: user.id, month: month, year: year).first_or_create
+      ts = Timesheet.where(user_id: user.id, month: month, year: year).first_or_create
+      unless ts.ready_for_submission
+        ts.ready_for_submission = true
+        ts.save
+      end
     end
 
     redirect_to admin_timesheets_path(month: params[:month], year: params[:year])
