@@ -1,0 +1,7 @@
+<h2>All Schedules</h2>
+<div style="text-align:center;">
+  <%= link_to '<< ' + l(@date - 1.month, :format => :month_name), calendar_schedules_path(month: (@date - 1.month).month, year: (@date - 1.month).year), class: 'pull-left' %>
+  <%= l @date, :format => :month_name %> <%= @date.year %>
+  <%= link_to l(@date + 1.month, :format => :month_name) + ' >>', calendar_schedules_path(month: (@date + 1.month).month, year: (@date + 1.month).year), class: 'pull-right' %>
+</div>
+<%= render :partial => 'calendar' %>

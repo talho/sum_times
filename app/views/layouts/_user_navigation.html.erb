@@ -8,7 +8,8 @@
   <li><%= link_to "I'm going to be late!", lates_path, :method => :post, :confirm => "O Noes! Just click ok and it will all be alright (and everyone will know about your lateness)." %></li>
   <li><%= link_to "My Timesheet", current_timesheets_path %></li>
   <li class="nav-header">Coworkers</li>
-  <li><%= link_to 'Office Schedule', schedules_path %></li>
+  <li><%= link_to 'Today', root_path %></li>
+  <li><%= link_to 'Office Schedule', calendar_schedules_path %></li>
   <li><%= link_to 'Holidays', holidays_path %></li>
   <% unless current_user.supervises.blank? %>
     <li class="nav-header">Approvals</li>

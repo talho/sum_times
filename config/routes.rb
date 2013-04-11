@@ -2,7 +2,12 @@ SumTimes::Application.routes.draw do
 
   resources :holidays, :only => [:index]
 
-  resources :schedules, :except => [:update, :edit, :delete]
+  resources :schedules, :except => [:update, :edit, :delete] do
+    collection do
+      get 'calendar'
+    end
+  end
+
   resources :lates
   resources :leaves
   resources :profiles, :except => [:edit, :update] do

@@ -1,7 +1,35 @@
-<h2>All Schedules</h2>
-<div style="text-align:center;">
-  <%= link_to '<< ' + l(@date - 1.month, :format => :month_name), schedules_path(month: (@date - 1.month).month, year: (@date - 1.month).year), class: 'pull-left' %>
-  <%= l @date, :format => :month_name %> <%= @date.year %>
-  <%= link_to l(@date + 1.month, :format => :month_name) + ' >>', schedules_path(month: (@date + 1.month).month, year: (@date + 1.month).year), class: 'pull-right' %>
-</div>
-<%= render :partial => 'calendar' %>
+<h2>Schedule for Today</h2>
+<h5><%= l Date.today, :format => :long %></h5>
+
+<% unless @holidays.blank? %>
+  <h4>Today's Holidays</h4>
+  <ul class="plain">
+  <% @holidays.each do |holiday| %>
+    <li><strong><%= holiday.name %></strong> <%= l holiday.start_date, :format => :short %><%= " - #{l(holiday.end_date, :format => :short)}" unless holiday.end_date.nil || holiday.end_date == holiday.start_date %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<% unless @leaves.blank? %>
+  <h4>People out today</h4>
+  <ul class="plain">
+  <% @leaves.each do |leave| %>
+    <li><strong><%= leave.user.name %></strong>
+      <%= if leave.hours && leave.hours < 8
+            " out for #{leave.hours} hour#{leave.hours != 1 ? 's' : ''}"
+          else
+            " out all day"
+          end
+       %>
+     </li>
+  <% end %>
+  </ul>
+<% end %>
+
+<h4>People scheduled today</h4>
+<ul class="plain">
+<% @schedules.each do |schedule| %>
+  <% schedule.date = Date.today %> <%# hate this, but what can ya do?%>
+  <li><strong><%= schedule.user.name %></strong> <%= "#{schedule.start} - #{schedule.end}" %></li>
+<% end %>
+</ul>

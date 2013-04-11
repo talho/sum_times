@@ -5,6 +5,15 @@ class SchedulesController < ApplicationController
   # GET /schedules
   # GET /schedules.json
   def index
+    @lates = Late.where(date: Date.today)
+    @leaves = Leave.where("(start_date <= :date AND end_date >= :date) OR start_date = :date", date: Date.today)
+    @schedules = Schedule.over_dates(Date.today, Date.today).where("user_id NOT IN (?)", @leaves.select("user_id").where("hours IS NULL OR hours >=8").group(:user_id).map(&:user_id))
+    @holidays = Holiday.where("(start_date <= :date AND end_date >= :date) OR start_date = :date", date: Date.today)
+
+    respond_with(@schedules, @lates, @leaves, @holidays)
+  end
+
+  def calendar
     month = params[:month].to_i unless params[:month].blank?
     year = params[:year].to_i unless params[:year].blank?
     @date = Date.today.at_beginning_of_month.change(:month => month, :year => year )
