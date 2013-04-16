@@ -5,6 +5,8 @@
     <tr>
       <th>Name</th>
       <th>Dates</th>
+      <th>Category</th>
+      <th>Reason</th>
       <th></th>
       <th></th>
     </tr>
@@ -14,6 +16,8 @@
       <tr>
         <td><%= leave.user.name %></td>
         <td><%= "#{leave.hours} hours - #{l leave.start_date, :format => :short}#{leave.end_date.nil? ? '' : (' - ' + l(leave.end_date, :format => :short))}" %></td>
+        <td><%= leave.category %></td>
+        <td><%= leave.reason %></td>
         <td><%= form_for leave, html: {:style => "margin: 0px;"} do |f| %>
             <%= f.hidden_field :approved, :value => true %>
             <%= f.submit 'Approve', :class => 'btn btn-success' %>
