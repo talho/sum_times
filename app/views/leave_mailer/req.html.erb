@@ -1,0 +1,9 @@
+<p><%= @leave.user.name %> has submitted a <%= @leave.category %> request starting on <%= l @leave.start_date, :format => :long %>
+  <% if @leave.end_date.nil? || @leave.end_date == @leave.start_date %>
+    for <%= @leave.hours %> hours.
+  <% else %>
+    until <%= l @leave.end_date, :format => :long %>.
+  <% end %>
+</p>
+
+<%= link_to 'View Requests', leaves_url %>

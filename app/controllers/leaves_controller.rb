@@ -30,7 +30,9 @@ class LeavesController < ApplicationController
   def create
   # POST /leaves.json
     @leave = Leave.new(params[:leave])
-    @leave.save
+    if @leave.save
+      LeaveMailer.req(@leave).deliver
+    end
     respond_with(@leave)
   end
 
@@ -38,6 +40,11 @@ class LeavesController < ApplicationController
   # PUT /leaves/1.json
   def update
     @leave.update_attributes(params[:leave])
+
+    if params[:leave][:approved]
+      LeaveMailer.accept(@leave, current_user).deliver
+    end
+
     respond_with(@leave) do |format|
       format.all {redirect_to leaves_path}
     end
@@ -47,6 +54,10 @@ class LeavesController < ApplicationController
   # DELETE /leaves/1.json
   def destroy
     @leave.destroy
+
+    if @leave.user_id != current_user.id
+      LeaveMailer.deny(@leave, current_user).deliver
+    end
 
     if request.referrer == leaves_url
       redirect_to leaves_path

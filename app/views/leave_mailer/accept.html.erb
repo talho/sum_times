@@ -1,0 +1,8 @@
+<p><%= @supervisor.name %> has accepted your leave request.</p>
+<p>You will be out starting on <%= l @leave.start_date, :format => :long %>
+  <% if @leave.end_date.nil? || @leave.end_date == @leave.start_date %>
+    for <%= @leave.hours %> hours.
+  <% else %>
+    until <%= l @leave.end_date, :format => :long %>.
+  <% end %>
+</p>

@@ -27,6 +27,8 @@ class Admin::TimesheetsController < ApplicationController
       end
     end
 
+    TimesheetMailer.generated.deliver
+
     redirect_to admin_timesheets_path(month: params[:month], year: params[:year])
   end
 end

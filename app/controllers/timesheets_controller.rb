@@ -56,6 +56,8 @@ class TimesheetsController < ApplicationController
     @timesheet = current_user.timesheets.find(params[:id])
     @timesheet.update_attributes user_approved: true
 
+    TimesheetMailer.submitted(@timesheet).deliver
+
     redirect_to timesheet_path(@timesheet)
   end
 
@@ -69,6 +71,8 @@ class TimesheetsController < ApplicationController
   def reject
     @timesheet = current_user.timesheets_to_accept.find(params[:id])
     @timesheet.update_attributes user_approved: nil
+
+    TimesheetMailer.rejected(@timesheet, current_user).deliver
 
     redirect_to timesheet_path(@timesheet)
   end

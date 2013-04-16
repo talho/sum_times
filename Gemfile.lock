@@ -4,6 +4,8 @@ GEM
     actionmailer (3.2.11)
       actionpack (= 3.2.11)
       mail (~> 2.4.4)
+    actionmailer-with-request (0.4.0)
+      rails (>= 3)
     actionpack (3.2.11)
       activemodel (= 3.2.11)
       activesupport (= 3.2.11)
@@ -143,6 +145,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  actionmailer-with-request (~> 0.4.0)
   bootstrap-datepicker-rails
   capistrano
   capistrano-unicorn
