@@ -6,8 +6,9 @@ class SchedulesController < ApplicationController
   # GET /schedules.json
   def index
     @lates = Late.where(date: Date.today)
-    @leaves = Leave.where("(start_date <= :date AND end_date >= :date) OR start_date = :date", date: Date.today)
-    @schedules = Schedule.over_dates(Date.today, Date.today).where("user_id NOT IN (?)", @leaves.select("user_id").where("hours IS NULL OR hours >=8").group(:user_id).map(&:user_id))
+    @leaves = Leave.where("(start_date <= :date AND end_date >= :date) or start_date = :date", date: Date.today)
+    @schedules = Schedule.over_dates(Date.today, Date.today)
+    @schedules = @schedules.where("user_id NOT IN (?)", @leaves.select("user_id").where("hours IS NULL OR hours >=8").group(:user_id).map(&:user_id)) unless @leaves.blank?
     @holidays = Holiday.where("(start_date <= :date AND end_date >= :date) OR start_date = :date", date: Date.today)
 
     respond_with(@schedules, @lates, @leaves, @holidays)
