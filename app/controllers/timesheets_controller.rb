@@ -56,7 +56,11 @@ class TimesheetsController < ApplicationController
     @timesheet = current_user.timesheets.find(params[:id])
     @timesheet.update_attributes user_approved: true
 
-    TimesheetMailer.submitted(@timesheet).deliver
+    if @timesheet.user.supervisors.blank? # shortcut supervisor approval if user has no supervisors
+      @timesheet.update_attributes supervisor_approved: true
+    else
+      TimesheetMailer.submitted(@timesheet).deliver
+    end
 
     redirect_to timesheet_path(@timesheet)
   end
