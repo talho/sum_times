@@ -6,8 +6,7 @@ bundler_args: --without development
 branches:
   only:
     - master
-script: "bundle exec rake spec"
+script: rake spec
 before_script:
   - cp -f config/database.travis.yml config/database.yml
-  - psql -c 'create database sumtimes_test;' -U postgres
-  - RAILS_ENV=test bundle exec rake db:schema:load db:test:prepare
+  - RAILS_ENV=test rake db:create db:schema:load --trace
