@@ -1,7 +1,8 @@
 class Accrual < ActiveRecord::Base
   attr_accessible :month, :year
 
-  validates :month, :uniqueness => [:scope => :year]
+  validates :month, :presence => true, :uniqueness => {:scope => :year}
+  validates :year, :presence => true
 
   before_create :add_times_to_users
 
