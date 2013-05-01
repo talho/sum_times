@@ -10,3 +10,4 @@ script: "bundle exec rake spec"
 before_script:
   - cp -f config/database.travis.yml config/database.yml
   - psql -c 'create database sumtimes_test;' -U postgres
+  - bundle exec rake db:schema:load db:test:prepare
