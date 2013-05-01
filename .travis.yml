@@ -7,3 +7,6 @@ branches:
   only:
     - master
 script: "bundle exec rake spec"
+before_script:
+  - cp -f config/database.travis.yml config/database.yml
+  - psql -c 'create database sumtimes_test;' -U postgres

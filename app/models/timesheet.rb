@@ -73,6 +73,6 @@ class Timesheet < ActiveRecord::Base
       self.total_hours += v['vacation_hours'] + v['sick_hours'] + v['admin_hours'] + v['holiday_hours'] + v['worked_hours']
     end
 
-    self.schedule = holder
+    self.schedule = holder.sort
   end
 end
