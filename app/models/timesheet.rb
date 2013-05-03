@@ -12,7 +12,7 @@ class Timesheet < ActiveRecord::Base
   scope :waiting_for_supervisor, where(user_approved: true, supervisor_approved: nil)
 
   def schedule
-    @schedule ||= JSON.parse(self[:schedule].blank? ? '{}' : self[:schedule])
+    @schedule ||= self[:schedule].blank? ? {} : JSON.parse(self[:schedule])
   end
 
   def schedule=(val)
@@ -53,13 +53,13 @@ class Timesheet < ActiveRecord::Base
     sched_days.each do |sched|
       leaves = Leave.where(user_id: self.user_id).where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date)
       holiday = Holiday.where("start_date = :date OR (start_date >= :date AND end_date <= :date)", date: sched.date).first
-      vac = leaves.select{|l| l.category == 'vacation'}.map(&:hours).sum
-      sick = leaves.select{|l| l.category == 'sick'}.map(&:hours).sum
-      admin = leaves.select{|l| l.category == 'admin'}.map(&:hours).sum
-      unpaid = leaves.select{|l| l.category == 'unpaid'}.map(&:hours).sum
+      vac = leaves.select{|l| l.category == 'vacation'}.map{ |l| l.hours(sched.date)}.sum
+      sick = leaves.select{|l| l.category == 'sick'}.map{ |l| l.hours(sched.date)}.sum
+      admin = leaves.select{|l| l.category == 'admin'}.map{ |l| l.hours(sched.date)}.sum
+      unpaid = leaves.select{|l| l.category == 'unpaid'}.map{ |l| l.hours(sched.date)}.sum
       holiday = holiday.present? ? 8 : 0
       norm = [sched.hours  - vac - sick - admin - unpaid - holiday, 0].max
-      holder[sched.date] = {'worked_hours' => norm, 'vacation_hours' => vac, 'sick_hours' => sick, 'admin_hours' => admin, 'unpaid_hours' => unpaid, 'holiday_hours' => holiday}
+      holder[sched.date.to_s] = {'worked_hours' => norm, 'vacation_hours' => vac, 'sick_hours' => sick, 'admin_hours' => admin, 'unpaid_hours' => unpaid, 'holiday_hours' => holiday}
     end
 
     # recalculate totals
@@ -73,6 +73,6 @@ class Timesheet < ActiveRecord::Base
       self.total_hours += v['vacation_hours'] + v['sick_hours'] + v['admin_hours'] + v['holiday_hours'] + v['worked_hours']
     end
 
-    self.schedule = holder.sort
+    self.schedule = Hash[holder.sort]
   end
 end
