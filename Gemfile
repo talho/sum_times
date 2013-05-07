@@ -54,5 +54,6 @@ end
 
 group :test do
   gem 'faker'
+  gem 'rspec-given'
   gem 'shoulda'
 end

@@ -14,8 +14,8 @@ class Schedule < ActiveRecord::Base
   def days=(in_days)
     in_days.each do |key, val|
       val["hours"] = (val["start"].blank? || val["end"].blank?) ? 0 : ((Time.parse(val["end"]) - Time.parse(val["start"]))/3600 - val["lunch"].to_f)
-    end
-    self[:days] = in_days.to_json
+    end unless in_days.nil?
+    self[:days] = in_days.nil? ? nil : in_days.to_json
   end
 
   def date=(in_date)
@@ -50,14 +50,42 @@ class Schedule < ActiveRecord::Base
   end
 
   def self.total_hours(user_id, start_date, end_date)
-    holidays = Holiday.where("(start_date = :start AND end_date IS NULL) OR (start_date >= :start AND end_date <= :end)", :start => start_date, :end => end_date)
-    self.over_dates(start_date, end_date).where(user_id: user_id).select{|s| holidays.index{|h| h.start_date == s.date || (h.start_date <= s.date && h.end_date >= s.date)}.nil?}.map(&:hours).sum
+    holidays = Holiday.where("(start_date >= :start AND start_date <= :end AND end_date IS NULL) OR (start_date >= :start AND end_date <= :end)", :start => start_date, :end => end_date)
+    self.over_dates(start_date, end_date).where(user_id: user_id).select{|s| holidays.index{|h| h.start_date == s.date || (!h.end_date.nil? && h.start_date <= s.date && h.end_date >= s.date)}.nil?}.map(&:hours).sum
   end
 
   private
   def close_previous_schedule
-    schedule = Schedule.where(user_id: self.user_id, end_date: nil).where("start_date < ?", self.start_date).order("start_date DESC").first # make this a bit smarter to ensure that schedules can't overlap
-    schedule.update_attributes(end_date: self.start_date - 1.day) unless schedule.nil?
+    schedules = Schedule.where(user_id: self.user_id).where("id != ?", self.id)
+    if self.end_date.nil?
+      # find any that start before and don't end or end after and modify to end
+      schedules.where("start_date < :start AND (end_date IS NULL OR end_date >= :start)", start: self.start_date).each do |schedule|
+        schedule.update_attributes end_date: (self.start_date - 1.day)
+      end
+
+      # find any that start after and destroy
+      schedules.where("start_date >= :start", start: self.start_date).destroy_all
+    else
+      # find any that start before and don't end and end and dupilicate
+      schedules.where("start_date < :start AND (end_date IS NULL OR end_date > :end)", start: self.start_date, end: self.end_date).each do |schedule|
+        new_sched = schedule.dup
+        new_sched.start_date = self.end_date + 1.day
+
+        schedule.update_attributes end_date: (self.start_date - 1.day)
+        new_sched.save
+      end
+
+      # find any that are wholly contained and destroy
+      schedules.where("start_date >= :start AND end_date <= :end", start: self.start_date, end: self.end_date).destroy_all
+
+      # find any that are partially contained and modify
+      schedules.where("start_date < :start AND end_date >= :start AND end_date <= :end", start: self.start_date, end: self.end_date).each do |schedule|
+        schedule.update_attributes end_date: (self.start_date - 1.day)
+      end
+      schedules.where("start_date >= :start AND start_date <= :end AND (end_date > :end OR end_date IS NULL)", start: self.start_date, end: self.end_date).each do |schedule|
+        schedule.update_attributes start_date: (self.end_date + 1.day)
+      end
+    end
   end
 
   def notify_timesheet

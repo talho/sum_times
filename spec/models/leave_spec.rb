@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Leave do
+  it { should belong_to :user}
+
   it "should initialize date_hours instance variable" do
     leave = Leave.new
     leave.instance_variable_get('@date_hours').should eq({})
@@ -47,12 +49,12 @@ describe Leave do
   end
 
   context "after save" do
+    Given(:Timesheet) { double 'Timesheet' }
+
     it "should notify any active timesheets so they update" do
       @schedule = FactoryGirl.create(:schedule)
-      @timesheet = FactoryGirl.create(:timesheet, user_id: @schedule.user_id)
-      expect {
-        @leave = FactoryGirl.create(:leave, :vacation, :with_end_date, user: @schedule.user)
-      }.to change{Timesheet.last.updated_at}
+      Timesheet.should_receive :leave_added
+      @leave = FactoryGirl.create(:leave, :vacation, :with_end_date, user: @schedule.user)
     end
   end
 end
