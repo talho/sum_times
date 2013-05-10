@@ -146,13 +146,25 @@ describe Schedule do
   end
 
   describe ".over_dates" do
-    Given!(:schedule) { FactoryGirl.create :schedule }
+    context "single schedule" do
+      Given!(:schedule) { FactoryGirl.create :schedule }
 
-    When(:over_dates) { Schedule.over_dates(Date.today, Date.today + 5.days).where(user_id: schedule.user_id) } # need to use schedule before the lazy given fires.
-    Then { over_dates.should be_an ActiveRecord::Relation }
-    And  { over_dates.all.count.should eq 6 }
-    And  { over_dates.all.first.date.should eq Date.today }
-    And  { over_dates.all.last.date.should eq(Date.today + 5.days) }
+      When(:over_dates) { Schedule.over_dates(Date.today, Date.today + 5.days).where(user_id: schedule.user_id) } # need to use schedule before the lazy given fires.
+      Then { over_dates.should be_an ActiveRecord::Relation }
+      And  { over_dates.all.count.should eq 6 }
+      And  { over_dates.all.first.date.should eq Date.today }
+      And  { over_dates.all.last.date.should eq(Date.today + 5.days) }
+    end
+
+    context "multiple schedules" do
+      Given!(:schedule) { FactoryGirl.create :schedule, start_date: Date.new(2013, 4, 1), end_date: Date.new(2013, 5, 11) }
+      Given!(:schedule2) { FactoryGirl.create :schedule, :no_lunch_schedule, user: schedule.user, start_date: Date.new(2013, 5, 12), end_date: Date.new(2013, 8, 1) }
+
+      When(:over_dates) { Schedule.over_dates(Date.new(2013, 5, 1), Date.new(2013,5,31)).where(user_id: schedule.user_id) } # need to use schedule before the lazy given fires.
+      Then { over_dates.all.count.should eq 31 }
+      And  { over_dates.all.first.date.should eq Date.new(2013,5,1) }
+      And  { over_dates.all.last.date.should eq(Date.new(2013,5,31)) }
+    end
   end
 
   describe ".total_hours" do

@@ -13,6 +13,14 @@ FactoryGirl.define do
     category 'sick'
   end
 
+  trait :unpaid do
+    category 'unpaid'
+  end
+
+  trait :admin do
+    category 'admin'
+  end
+
   trait :with_hours do
     hours 4
   end

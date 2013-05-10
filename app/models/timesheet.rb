@@ -1,8 +1,9 @@
 class Timesheet < ActiveRecord::Base
   attr_accessible :month, :year, :user_id, :user_approved, :supervisor_approved, :schedule, :ready_for_submission
 
-  validate :user_id, :presence => true
-  validate :month, :uniqueness => {:scope => :user_id}, :numericality => {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 12}
+  validates :user_id, :presence => true
+  validates :month, :presence => true, :uniqueness => {:scope => [:year, :user_id]}, :numericality => {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 12}
+  validates :year, :presence => true, :numericality => { only_integer: true, greater_than_or_equal_to: 1900 }
 
   before_create :generate_schedule
 
@@ -16,10 +17,12 @@ class Timesheet < ActiveRecord::Base
   end
 
   def schedule=(val)
-    self[:schedule] = val.to_json
+    @schedule = val
+    self[:schedule] = @schedule.to_json
   end
 
   def generate_schedule
+    return if self.month.nil? || self.year.nil?
     month_date = Date.today.at_beginning_of_month.change(:month => self.month, :year => self.year)
     self.build_schedule(month_date.at_beginning_of_month, month_date.at_end_of_month)
   end
@@ -29,19 +32,23 @@ class Timesheet < ActiveRecord::Base
   end
 
   def self.schedule_changed(sched)
-    self.update_from_change(sched.user_id, sched.start_date, sched.end_date || sched.start_date.at_end_of_month)
+    self.update_from_change(sched.user_id, sched.start_date, sched.end_date || (sched.start_date + 100.years) ) # this is a sliding large number of years to ensure we get all timesheets.
+                                                                                                                # really, don't generate timesheets for 100 years in the future or schedules
+                                                                                                                # stretching back 100 years.
   end
 
   protected
 
   def self.update_from_change(user_id, start_date, end_date)
     timesheets = Timesheet.where(user_id: user_id)
-    timesheets = timesheets.where("month >= :start_month AND month <= :end_month AND year >= :start_year AND year <= :end_year",
+    timesheets = timesheets.where("(month >= :start_month AND year = :start_year OR year > :start_year) AND (month <= :end_month AND year = :end_year OR year < :end_year)",
                   start_month: start_date.month, end_month: end_date.month, start_year: start_date.year, end_year: end_date.year)
 
     timesheets.each do |ts|
       # recaculate timesheet with leave in place
-      ts.send :build_schedule, start_date, end_date
+      local_start = start_date.month == ts.month && start_date.year == ts.year ? start_date : Date.new(ts.year, ts.month, 1)
+      local_end = end_date.month == ts.month && end_date.year == ts.year ? end_date : local_start.at_end_of_month
+      ts.send :build_schedule, local_start, local_end
       ts.save
     end
   end
