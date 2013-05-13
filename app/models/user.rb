@@ -47,6 +47,6 @@ class User < ActiveRecord::Base
 
   protected
   def transaction_hours(category)
-    self.leave_transactions.select('SUM(hours) as hours').where('date <= ?', Date.today).where(category: category).first[:hours]
+    self.leave_transactions.select('SUM(hours) as hours').where('date <= ?', Date.today).where(category: category).first[:hours] || 0
   end
 end
