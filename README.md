@@ -1,3 +1,5 @@
+New ownership, located at: https://github.com/Yakrware/sum_times
+
 #SumTimes
 
 [![Build Status](https://travis-ci.org/talho/sum_times.png)](https://travis-ci.org/talho/sum_times)
@@ -52,7 +54,7 @@ Fork this repository, make changes, submit a pull request.
 
 ---
 
-Copyright (c) 2013, TALHO
+Copyright (c) 2013, Yakrware
 All rights reserved.
 
 Licensed under modified BSD to disallow commercial re-hosting.
